@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Loader2, Save, Lock, Eye, EyeOff, Shield, Sliders } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { API_URL } from '../services/api';
 
 export default function Settings() {
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,7 @@ export default function Settings() {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:8000/api/profiles/me', {
+        const res = await fetch(`${API_URL}/profiles/me`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -49,7 +50,7 @@ export default function Settings() {
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:8000/api/profiles/me', {
+      const res = await fetch(`${API_URL}/profiles/me`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ 
@@ -83,7 +84,7 @@ export default function Settings() {
     setSavingPassword(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:8000/api/auth/password', {
+      const res = await fetch(`${API_URL}/auth/password`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ 

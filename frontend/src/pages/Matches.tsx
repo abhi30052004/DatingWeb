@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { MessageCircle } from 'lucide-react';
+import { API_URL } from '../services/api';
 
 export default function Matches() {
   const [matches, setMatches] = useState<any[]>([]);
@@ -17,7 +18,7 @@ export default function Matches() {
           return;
         }
 
-        const response = await fetch('http://localhost:8000/api/swipes/matches', {
+        const response = await fetch(`${API_URL}/swipes/matches`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 

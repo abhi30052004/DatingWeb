@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { Send, ArrowLeft, MoreVertical, MessageCircle, Smile } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import EmojiPicker from 'emoji-picker-react';
+import { API_URL, WS_URL } from '../services/api';
 
 export default function Messages() {
   const { matchId } = useParams();
@@ -27,7 +28,7 @@ export default function Messages() {
     const fetchInitialMessages = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch(`http://localhost:8000/api/messages/${matchId}`, {
+        const res = await fetch(`${API_URL}/messages/${matchId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -44,7 +45,7 @@ export default function Messages() {
     fetchInitialMessages();
 
     // Initialize WebSocket
-    const wsUrl = `ws://localhost:8000/api/messages/ws/${matchId}`;
+    const wsUrl = `${WS_URL}/messages/ws/${matchId}`;
     const ws = new WebSocket(wsUrl);
     
     ws.onmessage = (event) => {
@@ -85,7 +86,7 @@ export default function Messages() {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:8000/api/messages/', {
+      const res = await fetch(`${API_URL}/messages/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ match_id: matchId, content: messageText })

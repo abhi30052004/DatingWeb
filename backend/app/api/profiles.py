@@ -30,7 +30,8 @@ async def upload_profile_photo(
         shutil.copyfileobj(file.file, buffer)
 
     # The URL to access the photo
-    photo_url = f"http://localhost:8000/uploads/{filename}"
+    backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+    photo_url = f"{backend_url}/uploads/{filename}"
 
     # Update profile in database
     await db["profiles"].update_one(

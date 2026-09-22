@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Camera, MapPin, Loader2, Save, Edit2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../services/api';
 
 export default function Profile() {
   const { user, token, logout, updateUser } = useAuth();
@@ -32,7 +33,7 @@ export default function Profile() {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:8000/api/profiles/me', {
+        const res = await fetch(`${API_URL}/profiles/me`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -65,7 +66,7 @@ export default function Profile() {
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:8000/api/profiles/me', {
+      const res = await fetch(`${API_URL}/profiles/me`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ 
@@ -111,7 +112,7 @@ export default function Profile() {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:8000/api/profiles/photo', {
+      const res = await fetch(`${API_URL}/profiles/photo`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData

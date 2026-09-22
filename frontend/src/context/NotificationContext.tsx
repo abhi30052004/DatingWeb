@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import { useAuth } from './AuthContext';
+import { WS_URL } from '../services/api';
 
 interface NotificationContextType {}
 
@@ -23,7 +24,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
     const connect = () => {
       // Use ws:// or wss:// depending on protocol
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = `ws://localhost:8000/api/notifications/ws?token=${token}`;
+      const wsUrl = `${WS_URL}/notifications/ws?token=${token}`;
       
       const socket = new WebSocket(wsUrl);
 

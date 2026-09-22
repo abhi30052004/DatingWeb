@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { API_URL } from '../services/api';
 
 interface User {
   _id: string;
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchUser = async () => {
       if (token) {
         try {
-          const response = await fetch('http://localhost:8000/api/auth/me', {
+          const response = await fetch(`${API_URL}/auth/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
           });
           if (response.ok) {

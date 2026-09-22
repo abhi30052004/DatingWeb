@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform, useAnimation } f
 import { X, Heart, MapPin, Search, Star, Bell, Settings, BadgeCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import MatchModal from '../components/MatchModal';
 
@@ -28,13 +29,13 @@ export default function Discover() {
         }
 
         // Fetch my profile to get my photo
-        fetch('http://localhost:8000/api/profiles/me', { headers: { 'Authorization': `Bearer ${token}` }})
+        fetch(`${API_URL}/profiles/me`, { headers: { 'Authorization': `Bearer ${token}` }})
           .then(res => res.json())
           .then(data => { if (data.profile_photo) setMyPhoto(data.profile_photo); })
           .catch(() => {});
 
         // Fetch discovery
-        const response = await fetch('http://localhost:8000/api/profiles/discover', {
+        const response = await fetch(`${API_URL}/profiles/discover`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -75,7 +76,7 @@ export default function Discover() {
       else if (actionType === 'PASS') toast("Profile passed", { icon: "✕" });
       else if (actionType === 'SUPER_LIKE') toast.success(`Super Liked ${targetProfile.name}! 🌟`);
 
-      const response = await fetch('http://localhost:8000/api/swipes/', {
+      const response = await fetch(`${API_URL}/swipes/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ target_user_id: targetProfile.user_id, action: actionType })

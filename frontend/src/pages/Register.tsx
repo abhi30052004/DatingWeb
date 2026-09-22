@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { Camera, MapPin } from 'lucide-react';
+import { API_URL } from '../services/api';
 
 const INTERESTS = [
   'Travel', 'Music', 'Movies', 'Books', 'Gaming', 'Food', 'Photography', 
@@ -68,7 +69,7 @@ export default function Register() {
       // Register user
       setIsLoading(true);
       try {
-        const response = await fetch('http://localhost:8000/api/auth/register', {
+        const response = await fetch(`${API_URL}/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, password, date_of_birth: dob, gender: gender || 'other' })
@@ -79,7 +80,7 @@ export default function Register() {
         const formData = new URLSearchParams();
         formData.append('username', email);
         formData.append('password', password);
-        const loginRes = await fetch('http://localhost:8000/api/auth/login', {
+        const loginRes = await fetch(`${API_URL}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: formData
@@ -114,7 +115,7 @@ export default function Register() {
       setIsLoading(true);
       try {
         const token = localStorage.getItem('token');
-        await fetch('http://localhost:8000/api/profiles/me', {
+        await fetch(`${API_URL}/profiles/me`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({

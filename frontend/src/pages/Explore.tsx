@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search as SearchIcon, SlidersHorizontal, Loader2, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../services/api';
 
 import { ExploreProfileCard } from '../components/explore/ExploreProfileCard';
 import { FilterDrawer } from '../components/explore/FilterDrawer';
@@ -31,7 +32,7 @@ export default function Explore() {
         return;
       }
 
-      let url = 'http://localhost:8000/api/profiles/explore';
+      let url = `${API_URL}/profiles/explore`;
       if (query) {
         url += `?q=${encodeURIComponent(query)}`;
       }
@@ -82,7 +83,7 @@ export default function Explore() {
       if (actionType === 'LIKE') toast.success(`Liked ${targetProfile.name} ❤️`);
       else if (actionType === 'SUPER_LIKE') toast.success(`Super Liked ${targetProfile.name}! 🌟`);
 
-      const response = await fetch('http://localhost:8000/api/swipes/', {
+      const response = await fetch(`${API_URL}/swipes/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ target_user_id: targetProfile.user_id, action: actionType })
