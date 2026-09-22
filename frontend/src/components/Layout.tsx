@@ -1,11 +1,29 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, Search, Heart, MessageCircle, User } from 'lucide-react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, Search, Heart, MessageCircle, User, Star, Settings, LogOut } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
-  const navItems = [
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  // Desktop ordering: Discover, Matches, Messages, Likes
+  const desktopNavItems = [
     { path: '/discover', icon: Search, label: 'Discover' },
+    { path: '/matches', icon: Heart, label: 'Matches' },
+    { path: '/messages', icon: MessageCircle, label: 'Messages' },
+    { path: '/likes', icon: Star, label: 'Likes' },
+  ];
+
+  // Mobile ordering: Discover, Likes, Matches, Messages, Profile
+  const mobileNavItems = [
+    { path: '/discover', icon: Search, label: 'Discover' },
+    { path: '/likes', icon: Star, label: 'Likes' },
     { path: '/matches', icon: Heart, label: 'Matches' },
     { path: '/messages', icon: MessageCircle, label: 'Messages' },
     { path: '/profile', icon: User, label: 'Profile' },
@@ -19,7 +37,7 @@ export default function Layout() {
           Pairly
         </Link>
         <nav className="flex-1 space-y-2">
-          {navItems.map((item) => {
+          {desktopNavItems.map((item) => {
             const isActive = location.pathname.startsWith(item.path);
             return (
               <Link 
@@ -36,14 +54,26 @@ export default function Layout() {
           })}
         </nav>
         <div className="pt-6 border-t border-slate-800 mt-auto">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center overflow-hidden">
-              <User size={20} />
-            </div>
-            <div>
-              <p className="font-semibold text-sm">Demo User</p>
-              <p className="text-xs text-gray-500">Premium</p>
-            </div>
+          <div className="flex items-center gap-2 mb-2 px-2">
+            <Link to="/profile" className="flex-1 flex items-center gap-3 p-2 rounded-xl hover:bg-slate-800 transition group cursor-pointer">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center overflow-hidden shrink-0 group-hover:scale-105 transition">
+                {user?.profile_photo ? (
+                  <img src={user.profile_photo} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <User size={20} className="text-white" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="font-semibold text-sm truncate capitalize group-hover:text-primary transition">{user?.name || 'Loading...'}</p>
+                <p className="text-xs text-gray-400 truncate">{user?.email || ''}</p>
+              </div>
+            </Link>
+          </div>
+          <div className="flex px-4 gap-2">
+            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 py-2 bg-slate-800/50 hover:bg-red-500/20 text-gray-400 hover:text-red-400 rounded-lg transition" title="Log out">
+              <LogOut size={18} />
+              <span className="text-sm font-medium">Log out</span>
+            </button>
           </div>
         </div>
       </aside>
@@ -55,7 +85,7 @@ export default function Layout() {
 
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 w-full bg-surface/90 backdrop-blur-md border-t border-slate-800 z-50 px-6 py-4 flex justify-between items-center pb-safe">
-        {navItems.map((item) => {
+        {mobileNavItems.map((item) => {
           const isActive = location.pathname.startsWith(item.path);
           return (
             <Link 

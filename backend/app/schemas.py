@@ -19,6 +19,7 @@ class UserResponse(UserBase):
     role: str
     status: str
     created_at: datetime
+    profile_photo: Optional[str] = None
 
     class Config:
         populate_by_name = True
@@ -59,7 +60,7 @@ class ProfileBase(BaseModel):
     personality_traits: Optional[list[str]] = []
 
 class ProfileUpdate(ProfileBase):
-    pass
+    name: Optional[str] = None
 
 class ProfileResponse(ProfileBase):
     id: Optional[PyObjectId] = Field(default=None, alias="_id")
@@ -68,4 +69,12 @@ class ProfileResponse(ProfileBase):
     class Config:
         populate_by_name = True
         arbitrary_types_allowed = True
+
+class SwipeCreate(BaseModel):
+    target_user_id: str
+    action: str # "LIKE" | "PASS" | "SUPER_LIKE"
+
+class MatchResponse(BaseModel):
+    match: bool
+    matched_user_id: Optional[str] = None
 

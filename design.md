@@ -1,472 +1,585 @@
------------------------------------
-USER REGISTRATION & ONBOARDING
------------------------------------
+Improve the Pairly dating dashboard to be extremely USER-FRIENDLY, SIMPLE, INTUITIVE, and MODERN.
 
-Create a beautiful, multi-step dating profile registration experience.
+Do not make it look like an admin dashboard or complicated SaaS application.
 
-The registration process should feel simple, modern, friendly, and mobile-first.
+The experience should feel natural for someone opening a dating app for the first time.
 
-Do NOT put all fields on one screen.
+CORE UX PRINCIPLE:
 
-Use a 5-step onboarding flow with:
-- Progress indicator
-- Back button
-- Continue button
-- Skip button for optional fields
-- Form validation
-- Smooth Framer Motion page transitions
-- Auto-save onboarding progress
-- Clear error messages
-- Loading states
-- Success animation
+Discover → See Profile → Like/Pass → Match → Chat
+
+Keep the interface focused on this journey.
 
 -----------------------------------
-STEP 1 — CREATE ACCOUNT
+1. SIMPLE NAVIGATION
 -----------------------------------
 
-Title:
-“Let’s get you started.”
+Desktop navigation:
 
-Fields:
+PAIRLY
 
-- Full Name
-- Email Address
-- Password
-- Confirm Password
-- Date of Birth
+Discover
+Matches
+Messages
+Likes
 
-Requirements:
+Then:
 
-- Email must be valid
-- Password must meet minimum security requirements
-- Password confirmation must match
-- User must be 18 years or older
-- Show password strength indicator
-- Show/hide password button
-- Accept Terms of Service
-- Accept Privacy Policy
+Profile avatar
+Settings
 
-Optional:
-- Continue with Google
+Do NOT show too many navigation items.
 
-Button:
-“Create Account”
+Mobile bottom navigation:
 
-After successful registration:
-Automatically continue to Step 2.
+⌂ Discover
+♥ Likes
+♡ Matches
+💬 Messages
+👤 Profile
+
+Use clear icons + labels.
+
+Highlight the current section.
 
 -----------------------------------
-STEP 2 — ABOUT YOU
+2. DASHBOARD HEADER
 -----------------------------------
 
-Title:
-“Tell us a little about yourself.”
-
-Fields:
-
-Gender:
-- Male
-- Female
-- Non-binary
-- Prefer not to say
-
-Location:
-- City
-- Country
-
-Do NOT expose exact GPS coordinates publicly.
-
-Allow location permission for distance-based matching, but only display approximate distance to other users.
-
-Profile Photos:
-
-- Upload 2–6 photos
-- First photo becomes the primary profile photo
-- Drag to reorder photos
-- Delete photo
-- Set primary photo
-- Image preview
-- Upload progress
-- File validation
-
-Bio:
-
-“Tell people what makes you, you.”
-
-Allow a short bio with a character limit.
-
-Languages:
-Allow selecting multiple languages.
-
------------------------------------
-STEP 3 — INTERESTS & PERSONALITY
------------------------------------
-
-Title:
-“What are you into?”
-
-Create attractive selectable interest chips.
-
-Categories:
-
-Travel
-Music
-Movies
-Books
-Gaming
-Food
-Photography
-Fitness
-Sports
-Technology
-Art
-Fashion
-Cooking
-Nature
-Dancing
-Writing
-Coffee
-Pets
-Adventure
-Reading
-
-Allow multiple selections.
+Keep the header simple.
 
 Show:
 
-“Choose at least 5 interests.”
+“Good evening, Abhijit”
 
-Add personality questions.
+“Find someone who matches your vibe.”
 
-Example:
+Right side:
 
-“My ideal weekend is...”
+🔔 Notifications
+⚙ Settings
 
-Options:
-- Relaxing at home
-- Exploring the city
-- Traveling
-- Going out with friends
-- Trying something new
-
-“I’m usually...”
-
-- Introverted
-- Somewhere in between
-- Extroverted
-
-“People would describe me as...”
-
-- Curious
-- Funny
-- Calm
-- Adventurous
-- Creative
-- Ambitious
-- Caring
-- Social
-
-Make these questions optional but visually engaging.
+Do not overload the header with statistics.
 
 -----------------------------------
-STEP 4 — DATING PREFERENCES
+3. MAIN DISCOVERY AREA
 -----------------------------------
 
-Title:
-“Who are you looking for?”
+Make the profile card the MAIN focus of the page.
 
-Interested in:
+Heading:
 
-- Men
-- Women
-- Everyone
+“People you might like”
 
-Relationship goal:
+Small filter button:
 
-- Long-term relationship
-- Short-term relationship
-- Casual dating
-- Friendship
-- Still figuring it out
+⚙ Filters
 
-Preferred age:
+Main profile card:
 
-Use a dual range slider.
+Large beautiful photo
 
-Example:
-22 — 30
-
-Preferred distance:
-
-- 5 km
-- 10 km
-- 25 km
-- 50 km
-- 100 km+
-
-Add:
-
-“Show people within my preferred distance.”
-
-Lifestyle preferences can be optional:
-
-Smoking:
-- Never
-- Sometimes
-- Regularly
-- No preference
-
-Drinking:
-- Never
-- Sometimes
-- Regularly
-- No preference
-
-Pets:
-- Have pets
-- Love pets
-- Not interested
-- No preference
-
-Education:
-Optional
-
-Profession:
-Optional
-
-Do not make optional lifestyle fields required.
-
------------------------------------
-STEP 5 — PROFILE PREVIEW
------------------------------------
-
-Title:
-
-“Your profile is ready.”
-
-Show a beautiful live profile preview exactly as it will appear in Discover.
-
-Display:
-
-Profile photo
-Name
-Age
-Location
-Bio
-Interests
-Relationship goal
-Languages
-
-Example:
+Bottom gradient:
 
 Sarah
 24 · Kolkata
+● 3 km away
 
-“Weekend traveler, coffee lover and amateur photographer.”
+✓ Verified
 
-[Travel] [Coffee] [Photography] [Music]
+“Coffee lover, weekend traveler and photography enthusiast.”
 
-92% potential compatibility
+Interest tags:
 
-Add buttons:
+Travel
+Coffee
+Photography
 
-“Edit Profile”
-“Complete Profile”
-
-Primary CTA:
-
-“Start Discovering →”
-
-After clicking:
-
-Navigate to the Discover page.
+92% Match
 
 -----------------------------------
-PROFILE COMPLETION
+4. SIMPLE ACTION BUTTONS
 -----------------------------------
 
-Calculate a profile completion percentage.
+Under the profile card:
+
+        ✕
+      Pass
+
+   ★        ♥
+Super Like   Like
+
+Use large circular buttons.
+
+Make them obvious.
+
+Do not require the user to understand complicated controls.
+
+Add tooltips:
+
+Pass
+Super Like
+Like
+
+-----------------------------------
+5. SWIPE
+-----------------------------------
+
+Allow:
+
+Swipe left → Pass
+
+Swipe right → Like
+
+Swipe up → Super Like
+
+Use smooth Framer Motion spring animation.
+
+Show a subtle visual label while dragging:
+
+PASS
+
+LIKE
+
+SUPER LIKE
+
+Do not make the gesture mandatory.
+
+Buttons must always be available for users who prefer clicking.
+
+-----------------------------------
+6. WHY THIS MATCH?
+-----------------------------------
+
+Under the card:
+
+“Why you match”
+
+Show only 3–4 simple reasons:
+
+✓ 8 shared interests
+✓ Similar relationship goals
+✓ Lives nearby
+✓ Similar lifestyle
+
+Add:
+
+“See compatibility details”
+
+Clicking opens a small modal.
+
+Do not show complex mathematical explanations.
+
+-----------------------------------
+7. RECOMMENDED FOR YOU
+-----------------------------------
+
+After the main discovery card:
+
+“Recommended for you”
+
+Create a horizontal card list.
+
+Each card:
+
+Photo
+Name
+Age
+Distance
+Match %
 
 Example:
 
-Profile strength
-85%
+Maya
+25 · 4 km
+94% Match
 
-✓ Profile photo
-✓ Basic information
-✓ Bio
-✓ Interests
-✓ Dating preferences
-○ Add another photo
+Use simple cards.
 
-Show profile completion inside the Profile page.
+Clicking a card opens the profile.
 
 -----------------------------------
-VALIDATION
+8. NEAR YOU
 -----------------------------------
 
-Implement proper validation for:
+Section:
 
-- Required fields
-- Email format
-- Password strength
-- Password confirmation
-- Age 18+
-- Minimum interests
-- Required gender selection
-- Required dating preferences
-- Image file type
-- Image size
-- Bio character limit
+“People near you”
 
-Display friendly inline validation messages.
+Show 4–6 profiles.
 
-Do not use browser alert().
+Use approximate distances only:
 
-Use modern toast notifications and inline messages.
+Less than 1 km
+3 km away
+7 km away
+
+Never show exact addresses or coordinates.
 
 -----------------------------------
-AUTHENTICATION
+9. SHARED INTERESTS
 -----------------------------------
 
-Registration must connect to the backend.
+Create a simple recommendation section:
 
-Use:
+“Because you love Travel ✈”
 
-- Secure password hashing
-- JWT authentication
-- Protected routes
-- Refresh/session handling
-- Email verification
-- Secure authentication state
+Show people who share that interest.
 
-Never store plain-text passwords.
+Example:
 
-Never expose authentication secrets in frontend code.
+Maya
+You both love:
+Travel · Photography · Food
 
------------------------------------
-DATABASE FIELDS
------------------------------------
+Button:
 
-Create appropriate database models for:
-
-USER
-
-- id
-- full_name
-- email
-- password_hash
-- date_of_birth
-- gender
-- role
-- status
-- email_verified
-- created_at
-- updated_at
-
-PROFILE
-
-- id
-- user_id
-- bio
-- city
-- country
-- latitude
-- longitude
-- primary_photo
-- profile_completion
-- relationship_goal
-
-PROFILE_PHOTOS
-
-- id
-- user_id
-- image_url
-- position
-- is_primary
-- created_at
-
-INTERESTS
-
-- id
-- name
-- category
-
-USER_INTERESTS
-
-- user_id
-- interest_id
-
-PREFERENCES
-
-- user_id
-- interested_in
-- min_age
-- max_age
-- max_distance
-
-LIFESTYLE
-
-- user_id
-- smoking
-- drinking
-- pets
-- education
-- profession
-
-PERSONALITY
-
-- user_id
-- introvert_extrovert
-- weekend_preference
-- personality_traits
-
-LANGUAGES
-
-- id
-- name
-
-USER_LANGUAGES
-
-- user_id
-- language_id
+View Profile
 
 -----------------------------------
-UI/UX
+10. MATCH EXPERIENCE
 -----------------------------------
 
-The onboarding screen should feel like a premium dating application.
+When two users like each other:
 
-Use:
+Show a beautiful full-screen modal.
 
-- Full-screen layout
-- Large typography
-- Beautiful profile imagery
-- Gradient background
-- Glassmorphism cards
-- Rounded controls
-- Animated progress indicator
-- Smooth transitions
-- Framer Motion
-- ReactBits effects where appropriate
+Two profile photos appear.
 
-Use a progress indicator:
+Animation:
 
-01 Account
-02 About You
-03 Interests
-04 Preferences
-05 Profile
+Photo → Photo
+↓
+♥
+↓
+“It's a Match!”
+
+Text:
+
+“You both liked each other.”
+
+Buttons:
+
+“Send Message”
+“Keep Discovering”
+
+Keep this moment fun and simple.
+
+-----------------------------------
+11. CHAT
+-----------------------------------
+
+Messages should feel familiar.
+
+Conversation list:
+
+Sarah
+“Hey! How's your day going?”
+
+Maya
+“Loved your travel photos!”
+
+Alex
+“Hi 👋”
+
+Chat screen:
+
+Profile photo
+Name
+Online status
+
+Message bubbles
+
+Input:
+
+“Write a message...”
+
+Send button.
+
+Add:
+
+“Start with a suggestion”
+
+Show 3 simple conversation starters.
+
+Example:
+
+“What’s your favorite travel destination?”
+
+Do not force AI into the chat experience.
+
+-----------------------------------
+12. FILTERS
+-----------------------------------
+
+Keep filters simple.
+
+Open filter panel:
+
+Age
+────────────
+22 — 30
+
+Distance
+────────────
+25 km
+
+Interested in
+○ Men
+○ Women
+○ Everyone
+
+Looking for
+□ Long-term
+□ Casual
+□ Friendship
+
+Interests
+[Travel] [Music] [Food] [Books]
+
+Buttons:
+
+Reset
+Apply
 
 On mobile:
-- Full-screen onboarding
+Use a bottom-sheet filter interface.
+
+-----------------------------------
+13. PROFILE PAGE
+-----------------------------------
+
+Keep the user's own profile easy to understand.
+
+Large profile photo.
+
+Name
+Age
+Location
+
+Bio
+
+Interests
+
+Dating preferences
+
+Profile completion:
+
+85%
+
+“Complete your profile”
+
+Show only useful missing information.
+
+-----------------------------------
+14. USER-FRIENDLY FEEDBACK
+-----------------------------------
+
+Every important action should have immediate feedback.
+
+Like:
+
+“Like sent ❤️”
+
+Pass:
+
+“Profile skipped”
+
+Match:
+
+“It's a Match! 🎉”
+
+Message:
+
+“Message sent”
+
+Profile update:
+
+“Profile updated”
+
+Use elegant toast notifications.
+
+Never use browser alerts.
+
+-----------------------------------
+15. EMPTY STATES
+-----------------------------------
+
+If there are no recommendations:
+
+“No new people right now.”
+
+“Try increasing your distance or adjusting your preferences.”
+
+[Adjust Filters]
+
+If there are no matches:
+
+“No matches yet.”
+
+“Keep discovering people.”
+
+[Discover]
+
+If there are no messages:
+
+“No conversations yet.”
+
+“Match with someone to start chatting.”
+
+-----------------------------------
+16. FIRST-TIME USER EXPERIENCE
+-----------------------------------
+
+When a new user opens the dashboard for the first time:
+
+Show a short friendly walkthrough.
+
+Step 1:
+
+“Swipe or use the buttons to discover people.”
+
+Step 2:
+
+“Like someone you’re interested in.”
+
+Step 3:
+
+“When they like you back, you’ll match.”
+
+Step 4:
+
+“Start chatting.”
+
+Allow:
+
+“Skip tutorial”
+
+Do not force the tutorial every time.
+
+-----------------------------------
+17. VISUAL DESIGN
+-----------------------------------
+
+Make the UI:
+
+- Clean
+- Spacious
+- Friendly
+- Warm
+- Modern
+- Easy to understand
+
+Use:
+
+Dark background
+Soft pink/purple gradients
+White text
+Muted secondary text
+Large profile photography
+Rounded cards
+Glass effects
+Subtle shadows
+
+Avoid:
+
+- Too many cards
+- Too many statistics
+- Tiny text
+- Complicated menus
+- Excessive animations
+- Dense dashboards
+- Unnecessary AI features
+
+-----------------------------------
+18. ANIMATIONS
+-----------------------------------
+
+Use Framer Motion and ReactBits components carefully.
+
+Use:
+
+- Profile card swipe
+- Smooth page transitions
+- Card hover
+- Match animation
+- Button micro-interactions
+- Scroll reveal
+- Compatibility animation
+
+Recommended ReactBits components:
+
+- SpotlightCard
+- TiltedCard
+- GradientText
+- BlurText
+- AnimatedList
+- Aurora
+
+Do not use animations everywhere.
+
+Animations should help the user understand what happened.
+
+-----------------------------------
+19. ACCESSIBILITY
+-----------------------------------
+
+Make the website usable by everyone.
+
+Include:
+
+- Clear labels
+- Keyboard navigation
+- Focus states
+- High contrast
 - Large touch targets
-- Sticky Continue button
-- Bottom-sheet style selectors where appropriate
-- Swipe-friendly interest chips
-- Responsive photo uploader
+- Alt text
+- Reduced motion support
 
-Make the entire registration experience feel quick and enjoyable rather than like a long form.
+Never depend only on color to communicate status.
 
-IMPORTANT:
-Only collect information that is necessary or useful for dating/profile matching. Keep sensitive or optional information optional and clearly explain why it is requested.
+-----------------------------------
+20. MOBILE-FIRST
+-----------------------------------
+
+Mobile is the PRIMARY experience.
+
+At 375px width:
+
+Header
+↓
+Greeting
+↓
+Main profile card
+↓
+Pass / Super Like / Like
+↓
+Why this match
+↓
+Recommended profiles
+↓
+Bottom navigation
+
+The user should never need to zoom or horizontally scroll.
+
+Buttons should be easy to use with one hand.
+
+-----------------------------------
+FINAL UX GOAL
+-----------------------------------
+
+When a user opens Pairly, they should immediately understand:
+
+“Someone is waiting for me to discover.”
+
+The first screen should contain:
+
+1. One beautiful profile
+2. Clear information
+3. Why you match
+4. Three obvious actions
+5. Easy access to matches and messages
+
+Keep everything else secondary.
+
+Make Pairly feel welcoming, playful, safe, and effortless.

@@ -97,5 +97,8 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db =
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/me", response_model=schemas.UserResponse)
-async def read_users_me(current_user: Annotated[dict, Depends(get_current_user)]):
+async def read_users_me(current_user: Annotated[dict, Depends(get_current_user)], db = Depends(get_db)):
+    profile = await db["profiles"].find_one({"user_id": current_user["_id"]})
+    if profile and "profile_photo" in profile:
+        current_user["profile_photo"] = profile["profile_photo"]
     return current_user

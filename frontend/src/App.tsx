@@ -4,6 +4,10 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Discover from './pages/Discover';
+import Matches from './pages/Matches';
+import Messages from './pages/Messages';
+import Profile from './pages/Profile';
+import Likes from './pages/Likes';
 import Layout from './components/Layout';
 
 function App() {
@@ -24,9 +28,11 @@ function App() {
         {/* Protected Routes (wrapped in Layout) */}
         <Route element={<Layout />}>
           <Route path="/discover" element={<Discover />} />
-          <Route path="/matches" element={<div className="p-8">Matches Page (Coming Soon)</div>} />
-          <Route path="/messages" element={<div className="p-8">Messages Page (Coming Soon)</div>} />
-          <Route path="/profile" element={<div className="p-8">Profile Page (Coming Soon)</div>} />
+          <Route path="/matches" element={<Matches />} />
+          <Route path="/likes" element={<Likes />} />
+          <Route path="/messages" element={<Messages />} />
+          <Route path="/messages/:matchId" element={<Messages />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </>
