@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, token, logout, updateUser } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -12,10 +12,13 @@ export default function Profile() {
 
   // Edit States
   const [name, setName] = useState('');
+  const [dob, setDob] = useState('');
   const [profilePhoto, setProfilePhoto] = useState('');
   const [bio, setBio] = useState('');
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingBio, setIsEditingBio] = useState(false);
+  const [profession, setProfession] = useState('');
+  const [isEditingProfession, setIsEditingProfession] = useState(false);
   const [city, setCity] = useState('');
   const [stateProv, setStateProv] = useState('');
   const [goal, setGoal] = useState('');
@@ -36,8 +39,10 @@ export default function Profile() {
           const data = await res.json();
           setProfile(data);
           setName(user?.name || '');
+          setDob(user?.date_of_birth ? new Date(user.date_of_birth).toISOString().split('T')[0] : '');
           setProfilePhoto(data.profile_photo || '');
           setBio(data.bio || '');
+          setProfession(data.profession || '');
           setCity(data.city || '');
           setStateProv(data.state || '');
           setGoal(data.relationship_goal || '');
@@ -65,8 +70,10 @@ export default function Profile() {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ 
           name,
+          date_of_birth: dob,
           profile_photo: profilePhoto,
           bio, 
+          profession,
           city, 
           state: stateProv, 
           relationship_goal: goal,
@@ -79,7 +86,8 @@ export default function Profile() {
       });
       if (res.ok) {
         toast.success("Profile updated!");
-        // We reload to update the auth context user name across the app
+        updateUser({ name, date_of_birth: dob, profile_photo: profilePhoto });
+        // We reload to update the auth context user name across the app if name changed (optional now since context updates)
         if (name !== user?.name) {
           setTimeout(() => window.location.reload(), 1000);
         }
@@ -130,6 +138,19 @@ export default function Profile() {
     );
   }
 
+  // Calculate age based on user.date_of_birth
+  let age = '';
+  if (user?.date_of_birth) {
+    const dob = new Date(user.date_of_birth);
+    const today = new Date();
+    let calculatedAge = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      calculatedAge--;
+    }
+    age = `, ${calculatedAge}`;
+  }
+
   return (
     <div className="h-full overflow-y-auto p-4 md:p-8">
       <div className="max-w-2xl mx-auto space-y-8">
@@ -174,7 +195,7 @@ export default function Profile() {
           </div>
           
           <div className="flex-1 text-center md:text-left z-10">
-            <h1 className="text-3xl font-bold capitalize mb-1">{user?.name}</h1>
+            <h1 className="text-3xl font-bold capitalize mb-1">{user?.name}{age}</h1>
             <p className="text-primary font-medium mb-3">{user?.email}</p>
             <div className="flex flex-wrap gap-2 justify-center md:justify-start">
               <span className="bg-slate-900/80 px-3 py-1 rounded-full text-sm text-gray-300 font-medium flex items-center gap-1">
@@ -204,20 +225,23 @@ export default function Profile() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
-                Display Name
-                {!isEditingName && (
-                  <button type="button" onClick={() => setIsEditingName(true)} className="text-gray-500 hover:text-white transition">
-                    <Edit2 size={14} />
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-400">Display Name</label>
+                {!isEditingName ? (
+                  <button type="button" onClick={() => setIsEditingName(true)} className="text-gray-500 hover:text-white transition flex items-center gap-1">
+                    <Edit2 size={14} /> Edit
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => setIsEditingName(false)} className="text-primary hover:text-pink-400 transition text-sm font-medium">
+                    Done
                   </button>
                 )}
-              </label>
+              </div>
               {isEditingName ? (
                 <input 
                   type="text" 
                   value={name}
                   autoFocus
-                  onBlur={() => setIsEditingName(false)}
                   onKeyDown={e => e.key === 'Enter' && setIsEditingName(false)}
                   onChange={e => setName(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-primary transition"
@@ -231,22 +255,68 @@ export default function Profile() {
                 </div>
               )}
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">Date of Birth</label>
+              <input 
+                type="date" 
+                value={dob}
+                onChange={e => setDob(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-primary transition"
+              />
+            </div>
+            
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm font-medium text-gray-400">Profession</label>
+                {!isEditingProfession ? (
+                  <button type="button" onClick={() => setIsEditingProfession(true)} className="text-gray-500 hover:text-white transition flex items-center gap-1">
+                    <Edit2 size={14} /> Edit
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => setIsEditingProfession(false)} className="text-primary hover:text-pink-400 transition text-sm font-medium">
+                    Done
+                  </button>
+                )}
+              </div>
+              {isEditingProfession ? (
+                <input 
+                  type="text" 
+                  value={profession}
+                  autoFocus
+                  onKeyDown={e => e.key === 'Enter' && setIsEditingProfession(false)}
+                  onChange={e => setProfession(e.target.value)}
+                  placeholder="e.g. Software Engineer"
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-primary transition"
+                />
+              ) : (
+                <div 
+                  onClick={() => setIsEditingProfession(true)}
+                  className="w-full bg-slate-900/50 border border-transparent hover:border-slate-700 rounded-xl px-4 py-3 text-white cursor-pointer transition"
+                >
+                  {profession || <span className="text-gray-500">Add profession...</span>}
+                </div>
+              )}
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
-              Bio
-              {!isEditingBio && (
-                <button type="button" onClick={() => setIsEditingBio(true)} className="text-gray-500 hover:text-white transition">
-                  <Edit2 size={14} />
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-sm font-medium text-gray-400">Bio</label>
+              {!isEditingBio ? (
+                <button type="button" onClick={() => setIsEditingBio(true)} className="text-gray-500 hover:text-white transition flex items-center gap-1">
+                  <Edit2 size={14} /> Edit
+                </button>
+              ) : (
+                <button type="button" onClick={() => setIsEditingBio(false)} className="text-primary hover:text-pink-400 transition text-sm font-medium">
+                  Done
                 </button>
               )}
-            </label>
+            </div>
             {isEditingBio ? (
               <textarea 
                 value={bio}
                 autoFocus
-                onBlur={() => setIsEditingBio(false)}
                 onChange={e => setBio(e.target.value)}
                 placeholder="Tell people about yourself..."
                 className="w-full h-32 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-primary transition resize-none"

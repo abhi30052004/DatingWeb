@@ -14,6 +14,10 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: str
+
 class UserResponse(UserBase):
     id: Optional[PyObjectId] = Field(default=None, alias="_id")
     role: str
@@ -34,6 +38,7 @@ class TokenData(BaseModel):
 
 class ProfileBase(BaseModel):
     bio: Optional[str] = ""
+    profession: Optional[str] = ""
     city: Optional[str] = ""
     state: Optional[str] = ""
     latitude: Optional[float] = None
@@ -48,6 +53,11 @@ class ProfileBase(BaseModel):
     interested_in: Optional[str] = "everyone"
     min_age: Optional[int] = 18
     max_age: Optional[int] = 99
+    max_distance: Optional[int] = 50 # miles/km
+    
+    # Privacy
+    is_visible: Optional[bool] = True
+    incognito_mode: Optional[bool] = False
     
     # Lifestyle
     smoking: Optional[str] = "No preference"
@@ -61,6 +71,7 @@ class ProfileBase(BaseModel):
 
 class ProfileUpdate(ProfileBase):
     name: Optional[str] = None
+    date_of_birth: Optional[date] = None
 
 class ProfileResponse(ProfileBase):
     id: Optional[PyObjectId] = Field(default=None, alias="_id")

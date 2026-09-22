@@ -57,6 +57,7 @@ async def register(user: schemas.UserCreate, db = Depends(get_db)):
     profile_doc = {
         "user_id": result.inserted_id,
         "bio": "",
+        "profession": "",
         "city": "",
         "state": "",
         "latitude": None,
@@ -102,3 +103,23 @@ async def read_users_me(current_user: Annotated[dict, Depends(get_current_user)]
     if profile and "profile_photo" in profile:
         current_user["profile_photo"] = profile["profile_photo"]
     return current_user
+
+@router.put("/password")
+async def change_password(
+    data: schemas.PasswordChange, 
+    current_user: Annotated[dict, Depends(get_current_user)], 
+    db = Depends(get_db)
+):
+    if not verify_password(data.current_password, current_user["password_hash"]):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect current password"
+        )
+    
+    hashed_new_password = get_password_hash(data.new_password)
+    await db["users"].update_one(
+        {"_id": current_user["_id"]},
+        {"$set": {"password_hash": hashed_new_password}}
+    )
+    
+    return {"message": "Password updated successfully"}

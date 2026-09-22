@@ -60,6 +60,26 @@ async def create_swipe(
                 {"$set": match_record},
                 upsert=True
             )
+            
+            # Send notifications
+            from .notifications import notification_manager
+            
+            current_user_name = current_user.get("name", "Someone")
+            target_user = await db["users"].find_one({"_id": target_id})
+            target_name = target_user.get("name", "Someone") if target_user else "Someone"
+
+            # Notify the target user
+            await notification_manager.send_personal_message(
+                {"type": "NEW_MATCH", "message": f"🌟 New match with {current_user_name}!"},
+                str(target_id)
+            )
+
+            # Notify the current user
+            await notification_manager.send_personal_message(
+                {"type": "NEW_MATCH", "message": f"🌟 New match with {target_name}!"},
+                str(current_user["_id"])
+            )
+
             return {"match": True, "matched_user_id": str(target_id)}
 
     return {"match": False, "matched_user_id": None}

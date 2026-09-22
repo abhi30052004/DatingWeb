@@ -52,9 +52,16 @@ export default function Discover() {
     fetchProfiles();
   }, [navigate]);
 
+  const [exitDirection, setExitDirection] = useState<{ x: number, y: number }>({ x: 0, y: -20 });
+
   const handleAction = async (id: string, actionType: 'LIKE' | 'PASS' | 'SUPER_LIKE') => {
     const targetProfile = profiles.find(p => p._id === id);
     if (!targetProfile) return;
+
+    // Set the exit animation direction before removing
+    if (actionType === 'LIKE') setExitDirection({ x: 500, y: 0 });
+    else if (actionType === 'PASS') setExitDirection({ x: -500, y: 0 });
+    else if (actionType === 'SUPER_LIKE') setExitDirection({ x: 0, y: -500 });
 
     // Optimistic UI update
     setProfiles(prev => prev.filter(p => p._id !== id));
@@ -117,7 +124,7 @@ export default function Discover() {
           <button className="p-2 rounded-full bg-slate-800/50 hover:bg-slate-800 text-gray-400 hover:text-white transition">
             <Bell size={20} />
           </button>
-          <button className="p-2 rounded-full bg-slate-800/50 hover:bg-slate-800 text-gray-400 hover:text-white transition">
+          <button onClick={() => navigate('/settings')} className="p-2 rounded-full bg-slate-800/50 hover:bg-slate-800 text-gray-400 hover:text-white transition">
             <Settings size={20} />
           </button>
         </div>
@@ -134,6 +141,7 @@ export default function Discover() {
                 key={profiles[0]._id} 
                 profile={profiles[0]} 
                 onAction={(type) => handleAction(profiles[0]._id, type)} 
+                exitDirection={exitDirection}
               />
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-gray-400 bg-surface border border-slate-800 rounded-3xl p-6">
@@ -197,7 +205,7 @@ export default function Discover() {
 }
 
 // Separate SwipeCard component for isolated Framer Motion state
-function SwipeCard({ profile, onAction }: { profile: any, onAction: (type: 'LIKE' | 'PASS' | 'SUPER_LIKE') => void }) {
+function SwipeCard({ profile, onAction, exitDirection }: { profile: any, onAction: (type: 'LIKE' | 'PASS' | 'SUPER_LIKE') => void, exitDirection: {x: number, y: number} }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   
@@ -209,12 +217,15 @@ function SwipeCard({ profile, onAction }: { profile: any, onAction: (type: 'LIKE
 
   const handleDragEnd = (event: any, info: any) => {
     const threshold = 100;
-    if (info.offset.x > threshold) {
-      onAction('LIKE');
-    } else if (info.offset.x < -threshold) {
-      onAction('PASS');
-    } else if (info.offset.y < -threshold && Math.abs(info.offset.x) < 50) {
+    const offsetX = info.offset.x;
+    const offsetY = info.offset.y;
+
+    if (offsetY < -threshold && Math.abs(offsetY) > Math.abs(offsetX)) {
       onAction('SUPER_LIKE');
+    } else if (offsetX > threshold) {
+      onAction('LIKE');
+    } else if (offsetX < -threshold) {
+      onAction('PASS');
     }
   };
 
@@ -226,7 +237,7 @@ function SwipeCard({ profile, onAction }: { profile: any, onAction: (type: 'LIKE
       onDragEnd={handleDragEnd}
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.95, opacity: 0, y: -20, transition: { duration: 0.2 } }}
+      exit={{ scale: 0.95, opacity: 0, x: exitDirection.x, y: exitDirection.y, transition: { duration: 0.3 } }}
       transition={{ type: "spring", damping: 20 }}
       className="absolute inset-0 w-full h-full rounded-3xl overflow-hidden shadow-2xl bg-surface border border-slate-800 cursor-grab active:cursor-grabbing z-10 touch-none"
     >
@@ -249,6 +260,9 @@ function SwipeCard({ profile, onAction }: { profile: any, onAction: (type: 'LIKE
             <h2 className="text-3xl font-bold text-white mb-1 flex items-center gap-2 capitalize">
               {profile.name}, {profile.age} <BadgeCheck size={20} className="text-blue-400" />
             </h2>
+            <p className="flex items-center text-gray-300 gap-1 text-sm mb-1">
+              {profile.profession && <span className="font-semibold text-white mr-2">{profile.profession}</span>}
+            </p>
             <p className="flex items-center text-gray-300 gap-1 text-sm">
               <MapPin size={14} /> {profile.location || 'Nearby'}
               <span className="mx-2">•</span>

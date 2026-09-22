@@ -97,6 +97,18 @@ async def send_message(
     # Broadcast the new message to all clients connected to this match's room
     await manager.broadcast(str(match_obj_id), response_data)
     
+    # Broadcast to the global notification manager (only to the recipient)
+    from .notifications import notification_manager
+    recipient_id = next(uid for uid in match["users"] if uid != current_user["_id"])
+    sender_name = current_user.get("name", "Someone")
+    
+    notification_msg = {
+        "type": "NEW_MESSAGE",
+        "message": f"💬 {sender_name}: {message.content[:30]}{'...' if len(message.content) > 30 else ''}",
+        "match_id": str(match_obj_id)
+    }
+    await notification_manager.send_personal_message(notification_msg, str(recipient_id))
+    
     return response_data
 
 @router.get("/{match_id}", response_model=List[MessageResponse])

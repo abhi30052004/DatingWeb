@@ -1,32 +1,33 @@
+import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Search, Heart, MessageCircle, User, Star, Settings, LogOut } from 'lucide-react';
+import { Home, Search, Heart, MessageCircle, User, Star, Settings, LogOut, Compass } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const [imgError, setImgError] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  // Desktop ordering: Discover, Matches, Messages, Likes
   const desktopNavItems = [
     { path: '/discover', icon: Search, label: 'Discover' },
+    { path: '/explore', icon: Compass, label: 'Explore' },
     { path: '/matches', icon: Heart, label: 'Matches' },
     { path: '/messages', icon: MessageCircle, label: 'Messages' },
     { path: '/likes', icon: Star, label: 'Likes' },
   ];
 
-  // Mobile ordering: Discover, Likes, Matches, Messages, Profile
   const mobileNavItems = [
     { path: '/discover', icon: Search, label: 'Discover' },
-    { path: '/likes', icon: Star, label: 'Likes' },
+    { path: '/explore', icon: Compass, label: 'Explore' },
     { path: '/matches', icon: Heart, label: 'Matches' },
     { path: '/messages', icon: MessageCircle, label: 'Messages' },
-    { path: '/profile', icon: User, label: 'Profile' },
+    { path: '/likes', icon: Star, label: 'Likes' },
   ];
 
   return (
@@ -57,8 +58,13 @@ export default function Layout() {
           <div className="flex items-center gap-2 mb-2 px-2">
             <Link to="/profile" className="flex-1 flex items-center gap-3 p-2 rounded-xl hover:bg-slate-800 transition group cursor-pointer">
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center overflow-hidden shrink-0 group-hover:scale-105 transition">
-                {user?.profile_photo ? (
-                  <img src={user.profile_photo} alt="Profile" className="w-full h-full object-cover" />
+                {user?.profile_photo && !imgError && user.profile_photo !== "null" ? (
+                  <img 
+                    src={user.profile_photo} 
+                    alt="Profile" 
+                    className="w-full h-full object-cover" 
+                    onError={() => setImgError(true)} 
+                  />
                 ) : (
                   <User size={20} className="text-white" />
                 )}
