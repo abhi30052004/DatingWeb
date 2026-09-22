@@ -10,6 +10,8 @@ import Messages from './pages/Messages';
 import Profile from './pages/Profile';
 import Likes from './pages/Likes';
 import Settings from './pages/Settings';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
 import Layout from './components/Layout';
 import { useAuth } from './context/AuthContext';
 import { motion } from 'framer-motion';
@@ -45,6 +47,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         
         {/* Protected Routes (wrapped in Layout and NotificationProvider) */}
         <Route element={<NotificationProvider><Layout /></NotificationProvider>}>

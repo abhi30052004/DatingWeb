@@ -21,7 +21,7 @@ class PasswordChange(BaseModel):
 class UserResponse(UserBase):
     id: Optional[PyObjectId] = Field(default=None, alias="_id")
     role: str
-    status: str
+    status: Optional[str] = "active"
     created_at: datetime
     profile_photo: Optional[str] = None
 

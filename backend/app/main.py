@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from .api import auth, profiles, swipes, messages, notifications
+from .api import auth, profiles, swipes, messages, notifications, admin
 from dotenv import load_dotenv
 import os
 
@@ -42,6 +42,7 @@ app.include_router(profiles.router, prefix="/api")
 app.include_router(swipes.router, prefix="/api")
 app.include_router(messages.router, prefix="/api")
 app.include_router(notifications.router, prefix="/api")
+app.include_router(admin.router, prefix="/api")
 
 @app.get("/")
 def read_root():
