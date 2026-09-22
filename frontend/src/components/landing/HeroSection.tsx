@@ -79,21 +79,23 @@ export const HeroSection = () => {
         <div className="flex-1 w-full max-w-md h-[550px] relative mt-10 lg:mt-0 flex flex-col items-center">
           <div className="relative w-full h-[450px] md:h-[500px]">
             <AnimatePresence>
-              {cards.map((profile, index) => {
-                const isTop = index === 0;
+              {[...cards].reverse().map((profile, index) => {
+                const reversedIndex = cards.length - 1 - index;
+                const isTop = reversedIndex === 0;
                 return (
                   <SwipeCard
                     key={profile.id}
                     onSwipe={(dir) => handleSwipe(dir, profile.id)}
                     disabled={!isTop}
                     className={`absolute inset-0 origin-bottom ${!isTop ? 'pointer-events-none' : ''}`}
+                    style={{ zIndex: cards.length - reversedIndex }}
                   >
                     <motion.div 
                       initial={false}
                       animate={{
-                        scale: isTop ? 1 : 1 - index * 0.05,
-                        y: isTop ? 0 : index * 15,
-                        opacity: isTop ? 1 : 1 - index * 0.2,
+                        scale: isTop ? 1 : 1 - reversedIndex * 0.05,
+                        y: isTop ? 0 : reversedIndex * 15,
+                        opacity: isTop ? 1 : 1 - reversedIndex * 0.2,
                       }}
                       transition={{ duration: 0.3 }}
                       className="w-full h-full rounded-3xl overflow-hidden relative bg-surface border border-white/10"

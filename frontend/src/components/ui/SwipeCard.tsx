@@ -6,9 +6,10 @@ export interface SwipeCardProps {
   onSwipe?: (direction: 'left' | 'right' | 'up') => void;
   className?: string;
   disabled?: boolean;
+  style?: React.CSSProperties;
 }
 
-export const SwipeCard = ({ children, onSwipe, className = '', disabled = false }: SwipeCardProps) => {
+export const SwipeCard = ({ children, onSwipe, className = '', disabled = false, style = {} }: SwipeCardProps) => {
   const [exitX, setExitX] = useState(0);
   const [exitY, setExitY] = useState(0);
 
@@ -45,7 +46,7 @@ export const SwipeCard = ({ children, onSwipe, className = '', disabled = false 
       drag={!disabled}
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       onDragEnd={handleDragEnd}
-      style={{ x, y, rotate, opacity }}
+      style={{ x, y, rotate, opacity, ...style }}
       animate={{ x: exitX, y: exitY }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       whileDrag={{ scale: 1.05, cursor: 'grabbing' }}

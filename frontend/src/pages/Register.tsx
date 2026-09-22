@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Camera, MapPin } from 'lucide-react';
+import { Camera, MapPin, ArrowLeft } from 'lucide-react';
 import { API_URL } from '../services/api';
 
 const INTERESTS = [
@@ -149,8 +149,13 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Top Navbar */}
-      <div className="p-6">
+      <div className="p-6 flex items-center justify-between">
+        <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition group">
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-sm">Home</span>
+        </Link>
         <h1 className="text-primary font-black text-2xl tracking-tighter">PAIRLY</h1>
+        <div className="w-16"></div>{/* spacer for center alignment */}
       </div>
 
       <div className="flex-1 flex flex-col items-center p-4">

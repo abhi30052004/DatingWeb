@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { API_URL } from '../services/api';
+import { ArrowLeft } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -48,6 +49,11 @@ export default function Login() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-surface border border-slate-800 p-8 rounded-3xl shadow-2xl max-w-md w-full"
       >
+        <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition mb-6 group">
+          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <span className="text-sm">Back to Home</span>
+        </Link>
+
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
           <p className="text-gray-400">Log in to continue discovering connections.</p>
