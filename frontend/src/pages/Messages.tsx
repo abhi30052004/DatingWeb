@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Send, ArrowLeft, MoreVertical, MessageCircle, Smile } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { API_URL, WS_URL } from '../services/api';
 
 export default function Messages() {
@@ -202,7 +202,7 @@ export default function Messages() {
           
           {showEmojiPicker && (
             <div className="absolute bottom-16 left-0 z-50 shadow-2xl">
-              <EmojiPicker onEmojiClick={onEmojiClick} theme="dark" />
+              <EmojiPicker onEmojiClick={onEmojiClick} theme={Theme.DARK} />
             </div>
           )}
 

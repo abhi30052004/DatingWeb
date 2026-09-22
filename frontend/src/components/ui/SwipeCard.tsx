@@ -26,7 +26,7 @@ export const SwipeCard = ({ children, onSwipe, className = '', disabled = false,
   // Super Like (Up) overlay opacity
   const superLikeOpacity = useTransform(y, [-20, -100], [0, 1]);
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (disabled) return;
     
     if (info.offset.x > 100) {

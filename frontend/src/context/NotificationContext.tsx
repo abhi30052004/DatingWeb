@@ -23,7 +23,6 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
     // Connect to global notifications websocket
     const connect = () => {
       // Use ws:// or wss:// depending on protocol
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const wsUrl = `${WS_URL}/notifications/ws?token=${token}`;
       
       const socket = new WebSocket(wsUrl);
@@ -63,7 +62,7 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
         }
       };
 
-      socket.onclose = (event) => {
+      socket.onclose = (_event: CloseEvent) => {
         console.log("Notification websocket closed. Reconnecting in 5s...");
         setTimeout(() => {
           if (ws.current === socket) {

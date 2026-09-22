@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react';
+
 
 interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
   children?: React.ReactNode;

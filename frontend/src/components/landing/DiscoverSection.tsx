@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Heart, MapPin, Search } from 'lucide-react';
+import { Heart, MapPin } from 'lucide-react';
 
 const DISCOVER_PROFILES = [
   { id: 1, name: 'Jessica', age: 23, location: '1 km away', bio: 'Foodie and traveler.', image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80', match: 75, interests: ['Food', 'Travel'] },
@@ -32,7 +32,7 @@ export const DiscoverSection = () => {
           className="flex gap-6 min-w-max lg:ml-20"
           style={{ x }}
         >
-          {DISCOVER_PROFILES.map((profile, i) => (
+          {DISCOVER_PROFILES.map((profile) => (
             <motion.div 
               key={profile.id}
               whileHover={{ y: -15, scale: 1.02 }}

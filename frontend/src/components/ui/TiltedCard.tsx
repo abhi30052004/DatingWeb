@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useSpring, useTransform } from 'framer-motion';
 
 interface TiltedCardProps {

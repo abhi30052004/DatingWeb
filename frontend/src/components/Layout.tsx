@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Search, Heart, MessageCircle, User, Star, Settings, LogOut, Compass } from 'lucide-react';
+import { Search, Heart, MessageCircle, User, Star, LogOut, Compass } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Layout() {

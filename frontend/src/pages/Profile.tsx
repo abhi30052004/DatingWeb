@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { API_URL } from '../services/api';
 
 export default function Profile() {
-  const { user, token, logout, updateUser } = useAuth();
+  const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

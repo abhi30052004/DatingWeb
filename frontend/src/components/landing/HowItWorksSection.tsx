@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { SpotlightCard } from '../ui/SpotlightCard';
 
 export const HowItWorksSection = () => {

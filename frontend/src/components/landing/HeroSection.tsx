@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BlurText } from '../ui/BlurText';
 import { MagneticButton } from '../ui/MagneticButton';
 import { ArrowRight, X, Heart, Star } from 'lucide-react';

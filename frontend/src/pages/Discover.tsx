@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { X, Heart, MapPin, Search, Star, Bell, Settings, BadgeCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -216,7 +216,7 @@ function SwipeCard({ profile, onAction, exitDirection }: { profile: any, onActio
   const passOpacity = useTransform(x, [0, -100], [0, 1]);
   const superLikeOpacity = useTransform(y, [0, -100], [0, 1]);
 
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (_event: any, info: any) => {
     const threshold = 100;
     const offsetX = info.offset.x;
     const offsetY = info.offset.y;

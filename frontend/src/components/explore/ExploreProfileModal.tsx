@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, Star, MapPin, BadgeCheck, MessageCircle, AlertCircle, Ban } from 'lucide-react';
+import { X, Heart, Star, MapPin, BadgeCheck, AlertCircle, Ban } from 'lucide-react';
 
 interface ExploreProfileModalProps {
   profile: any;

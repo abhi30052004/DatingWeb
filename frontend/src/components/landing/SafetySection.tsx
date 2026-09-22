@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Shield, Lock, UserX, MessageSquareWarning } from 'lucide-react';
 import { motion } from 'framer-motion';
 
