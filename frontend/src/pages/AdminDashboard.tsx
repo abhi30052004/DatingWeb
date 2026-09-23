@@ -9,7 +9,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({ users: 0, swipes: 0, matches: 0 });
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Modal state
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
     if (!window.confirm('Are you sure you want to delete this user and all associated data?')) {
       return;
     }
-    
+
     try {
       await api.deleteUser(userId);
       toast.success('User deleted successfully');
@@ -174,7 +174,7 @@ const AdminDashboard = () => {
             <h2 className="text-xl font-bold">Registered Users</h2>
             <span className="bg-white/10 text-xs px-2 py-1 rounded-full">{users.length} Total</span>
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-white/5 border-b border-white/10 text-gray-400 text-sm">
@@ -257,22 +257,22 @@ const AdminDashboard = () => {
               exit={{ opacity: 0, scale: 0.95 }}
               className="bg-card border border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl relative"
             >
-              <button 
+              <button
                 onClick={() => setIsModalOpen(false)}
                 className="absolute top-4 right-4 text-gray-400 hover:text-white"
               >
                 <X size={24} />
               </button>
-              
+
               <h2 className="text-2xl font-bold mb-6">Edit User Profile</h2>
-              
+
               <form onSubmit={handleUpdateUser} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">Name</label>
                   <input
                     type="text"
                     value={editForm.name}
-                    onChange={e => setEditForm({...editForm, name: e.target.value})}
+                    onChange={e => setEditForm({ ...editForm, name: e.target.value })}
                     className="w-full bg-background border border-white/10 rounded-xl py-2 px-3 text-white focus:border-red-500 focus:ring-1 focus:ring-red-500"
                     required
                   />
@@ -282,7 +282,7 @@ const AdminDashboard = () => {
                   <input
                     type="email"
                     value={editForm.email}
-                    onChange={e => setEditForm({...editForm, email: e.target.value})}
+                    onChange={e => setEditForm({ ...editForm, email: e.target.value })}
                     className="w-full bg-background border border-white/10 rounded-xl py-2 px-3 text-white focus:border-red-500 focus:ring-1 focus:ring-red-500"
                     required
                   />
@@ -291,7 +291,7 @@ const AdminDashboard = () => {
                   <label className="block text-sm font-medium text-gray-300 mb-1">Gender</label>
                   <select
                     value={editForm.gender}
-                    onChange={e => setEditForm({...editForm, gender: e.target.value})}
+                    onChange={e => setEditForm({ ...editForm, gender: e.target.value })}
                     className="w-full bg-background border border-white/10 rounded-xl py-2 px-3 text-white focus:border-red-500 focus:ring-1 focus:ring-red-500"
                   >
                     <option value="male">Male</option>
@@ -299,7 +299,7 @@ const AdminDashboard = () => {
                     <option value="other">Other</option>
                   </select>
                 </div>
-                
+
                 {/* Read Only Profile Info */}
                 <div className="mt-6 p-4 bg-white/5 rounded-xl">
                   <h3 className="text-sm font-semibold text-gray-400 mb-2">Detailed Profile (Read Only)</h3>

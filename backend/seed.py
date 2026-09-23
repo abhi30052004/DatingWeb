@@ -136,6 +136,146 @@ DEMO_PROFILES = [
         "city": "San Jose",
         "interests": ["Gaming", "Technology", "Anime", "Pizza"],
         "photo": "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Lucas",
+        "email": "lucas@demo.com",
+        "gender": "male",
+        "bio": "Skater, surfer, and casual guitarist. Looking for someone with a chill vibe.",
+        "profession": "Graphic Designer",
+        "city": "San Diego",
+        "interests": ["Skating", "Surfing", "Music", "Art"],
+        "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Chloe",
+        "email": "chloe@demo.com",
+        "gender": "female",
+        "bio": "Always planning my next trip. I have an obsession with matcha lattes.",
+        "profession": "Travel Blogger",
+        "city": "Portland",
+        "interests": ["Travel", "Coffee", "Writing", "Photography"],
+        "photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Ethan",
+        "email": "ethan@demo.com",
+        "gender": "male",
+        "bio": "Just a regular guy looking for a regular girl. Love movie marathons and popcorn.",
+        "profession": "Accountant",
+        "city": "Dallas",
+        "interests": ["Movies", "Finance", "Gaming", "Food"],
+        "photo": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Zoe",
+        "email": "zoe@demo.com",
+        "gender": "female",
+        "bio": "Fitness instructor and marathon runner. Let's get active!",
+        "profession": "Fitness Coach",
+        "city": "Phoenix",
+        "interests": ["Fitness", "Sports", "Health", "Running"],
+        "photo": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Liam",
+        "email": "liam@demo.com",
+        "gender": "male",
+        "bio": "Tech enthusiast and crypto trader. Can talk about web3 for hours.",
+        "profession": "Trader",
+        "city": "San Francisco",
+        "interests": ["Technology", "Finance", "Gaming", "Business"],
+        "photo": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Aria",
+        "email": "aria@demo.com",
+        "gender": "female",
+        "bio": "Indie music fan, vintage clothes collector, and plant mom.",
+        "profession": "Boutique Owner",
+        "city": "Brooklyn",
+        "interests": ["Fashion", "Music", "Art", "Nature"],
+        "photo": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Mason",
+        "email": "mason@demo.com",
+        "gender": "male",
+        "bio": "Stand-up comedy amateur. If I can't make you laugh, the drinks are on me.",
+        "profession": "Sales Representative",
+        "city": "Chicago",
+        "interests": ["Comedy", "Writing", "Movies", "Food"],
+        "photo": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Lily",
+        "email": "lily@demo.com",
+        "gender": "female",
+        "bio": "I spend too much time on TikTok and not enough time reading. Help me change that.",
+        "profession": "Social Media Manager",
+        "city": "Los Angeles",
+        "interests": ["Social Media", "Books", "Movies", "Dancing"],
+        "photo": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Logan",
+        "email": "logan@demo.com",
+        "gender": "male",
+        "bio": "I fix cars for a living. I can also fix your broken heart.",
+        "profession": "Mechanic",
+        "city": "Detroit",
+        "interests": ["Cars", "Sports", "Music", "Coffee"],
+        "photo": "https://images.unsplash.com/photo-1504257432389-52343af06ae3?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Grace",
+        "email": "grace@demo.com",
+        "gender": "female",
+        "bio": "I bake a mean chocolate chip cookie. Looking for someone to taste test them.",
+        "profession": "Baker",
+        "city": "Seattle",
+        "interests": ["Baking", "Food", "Movies", "Pets"],
+        "photo": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Jack",
+        "email": "jack@demo.com",
+        "gender": "male",
+        "bio": "History buff. I love museums and old architecture.",
+        "profession": "Teacher",
+        "city": "Boston",
+        "interests": ["History", "Museums", "Books", "Architecture"],
+        "photo": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Hannah",
+        "email": "hannah@demo.com",
+        "gender": "female",
+        "bio": "Dog walker by day, aspiring novelist by night.",
+        "profession": "Freelance Writer",
+        "city": "Austin",
+        "interests": ["Dogs", "Writing", "Books", "Coffee"],
+        "photo": "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Noah",
+        "email": "noah@demo.com",
+        "gender": "male",
+        "bio": "Musician trying to make it big. Come to my next gig!",
+        "profession": "Musician",
+        "city": "Nashville",
+        "interests": ["Music", "Concerts", "Writing", "Nightlife"],
+        "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+        "name": "Ava",
+        "email": "ava@demo.com",
+        "gender": "female",
+        "bio": "I love astronomy and stargazing. Let's go to the planetarium.",
+        "profession": "Astronomer",
+        "city": "Tucson",
+        "interests": ["Science", "Nature", "Movies", "Coffee"],
+        "photo": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80"
     }
 ]
 
@@ -143,7 +283,14 @@ async def seed_db():
     print("Clearing old demo users...")
     await db.users.delete_many({"email": {"$regex": "@demo.com"}})
     
-    # We must also clean up profiles associated with demo users, but for simplicity, we'll just wipe demo users
+    # We must also clean up profiles associated with demo users
+    await db.profiles.delete_many({}) # Just wipe profiles and let's rely on users re-registering or demo users
+    # Actually wait, let's only wipe demo profiles to keep real users safe if there are any.
+    demo_users_cursor = db.users.find({"email": {"$regex": "@demo.com"}})
+    demo_users = await demo_users_cursor.to_list(length=None)
+    demo_user_ids = [u["_id"] for u in demo_users]
+    if demo_user_ids:
+        await db.profiles.delete_many({"user_id": {"$in": demo_user_ids}})
     
     print(f"Seeding {len(DEMO_PROFILES)} demo profiles...")
     for p in DEMO_PROFILES:
@@ -170,9 +317,9 @@ async def seed_db():
             "interests": p["interests"],
             "languages": ["English"],
             "relationship_goal": random.choice(["Casual dating", "Long-term relationship", "Friendship"]),
-            "interested_in": "women" if p["gender"] == "male" else "men",
+            "interested_in": "everyone",
             "max_distance": 50,
-            "age_range": {"min": 18, "max": 40},
+            "age_range": {"min": 18, "max": 60},
             "is_visible": True,
             "incognito_mode": False,
             "profile_photo": p["photo"],

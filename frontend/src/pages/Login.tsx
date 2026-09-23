@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { API_URL } from '../services/api';
 import { ArrowLeft } from 'lucide-react';
+import { AuroraBackground } from '../components/ui/AuroraBackground';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -43,11 +44,11 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <motion.div 
+    <AuroraBackground className="min-h-screen flex items-center justify-center p-4">
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-surface border border-slate-800 p-8 rounded-3xl shadow-2xl max-w-md w-full"
+        className="bg-surface/80 backdrop-blur-md border border-slate-800 p-8 rounded-3xl shadow-2xl max-w-md w-full relative z-10"
       >
         <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition mb-6 group">
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
@@ -62,9 +63,9 @@ export default function Login() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
-            <input 
-              type="email" 
-              required 
+            <input
+              type="email"
+              required
               value={email}
               onChange={e => setEmail(e.target.value)}
               className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition"
@@ -73,16 +74,16 @@ export default function Login() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-1">Password</label>
-            <input 
-              type="password" 
-              required 
+            <input
+              type="password"
+              required
               value={password}
               onChange={e => setPassword(e.target.value)}
               className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition"
               placeholder="••••••••"
             />
           </div>
-          
+
           <div className="flex items-center justify-between py-2">
             <label className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer">
               <input type="checkbox" className="rounded border-slate-700 bg-slate-800/50 text-primary focus:ring-primary focus:ring-offset-surface" />
@@ -91,7 +92,7 @@ export default function Login() {
             <a href="#" className="text-sm text-primary hover:underline">Forgot password?</a>
           </div>
 
-          <button 
+          <button
             type="submit"
             disabled={isLoading}
             className="w-full bg-primary hover:bg-pink-600 disabled:opacity-50 disabled:hover:bg-primary transition text-white font-semibold rounded-xl px-4 py-3 shadow-lg shadow-primary/20 flex justify-center items-center gap-2 mt-4"
@@ -106,6 +107,6 @@ export default function Login() {
           Don't have an account? <Link to="/register" className="text-primary hover:underline">Sign up</Link>
         </p>
       </motion.div>
-    </div>
+    </AuroraBackground>
   );
 }

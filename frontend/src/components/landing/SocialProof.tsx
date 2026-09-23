@@ -22,7 +22,7 @@ export const SocialProof = () => {
   ];
 
   return (
-    <section className="py-12 border-b border-white/5 bg-background relative z-20">
+    <section className="py-12 bg-background relative z-20">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-10">
           <p className="text-white/60 font-medium tracking-wide">

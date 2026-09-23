@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Lock, User, ShieldAlert } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { api } from '../services/api';
+import { AuroraBackground } from '../components/ui/AuroraBackground';
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
@@ -27,20 +28,20 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <motion.div 
+    <AuroraBackground className="min-h-screen flex items-center justify-center p-4">
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full bg-card rounded-2xl p-8 border border-white/10 shadow-2xl relative overflow-hidden"
+        className="max-w-md w-full bg-card/80 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-2xl relative z-10 overflow-hidden"
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500"></div>
-        
+
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center border border-red-500/30">
             <ShieldAlert size={32} className="text-red-500" />
           </div>
         </div>
-        
+
         <h2 className="text-2xl font-bold text-white text-center mb-2">Admin Portal</h2>
         <p className="text-gray-400 text-center mb-8">Restricted access only.</p>
 
@@ -84,7 +85,7 @@ const AdminLogin = () => {
           </button>
         </form>
       </motion.div>
-    </div>
+    </AuroraBackground>
   );
 };
 

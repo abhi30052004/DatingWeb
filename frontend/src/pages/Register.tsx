@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { Camera, MapPin, ArrowLeft } from 'lucide-react';
 import { API_URL } from '../services/api';
+import { AuroraBackground } from '../components/ui/AuroraBackground';
 
 const INTERESTS = [
-  'Travel', 'Music', 'Movies', 'Books', 'Gaming', 'Food', 'Photography', 
-  'Fitness', 'Sports', 'Technology', 'Art', 'Fashion', 'Cooking', 
+  'Travel', 'Music', 'Movies', 'Books', 'Gaming', 'Food', 'Photography',
+  'Fitness', 'Sports', 'Technology', 'Art', 'Fashion', 'Cooking',
   'Nature', 'Dancing', 'Writing', 'Coffee', 'Pets', 'Adventure', 'Reading'
 ];
 
@@ -54,18 +55,18 @@ export default function Register() {
 
   const handleNext = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    
+
     if (step === 1) {
       if (password !== confirmPassword) return toast.error("Passwords don't match");
       const demoOtp = Math.floor(100000 + Math.random() * 900000).toString();
       setGeneratedOtp(demoOtp);
       toast.success(`DEMO OTP: ${demoOtp}`, { duration: 8000, icon: '🔑' });
       setStep(2);
-    } 
+    }
     else if (step === 2) {
       const enteredOtp = otp.join('');
       if (enteredOtp !== generatedOtp) return toast.error('Invalid OTP.');
-      
+
       // Register user
       setIsLoading(true);
       try {
@@ -75,7 +76,7 @@ export default function Register() {
           body: JSON.stringify({ name, email, password, date_of_birth: dob, gender: gender || 'other' })
         });
         if (!response.ok) throw new Error('Registration failed');
-        
+
         // Auto Login
         const formData = new URLSearchParams();
         formData.append('username', email);
@@ -147,18 +148,17 @@ export default function Register() {
   const totalDisplaySteps = 4; // Account, About, Interests, Preferences/Preview
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <AuroraBackground className="min-h-screen flex flex-col">
       {/* Top Navbar */}
-      <div className="p-6 flex items-center justify-between">
-        <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition group">
+      <div className="relative z-10 p-6 flex items-center w-full">
+        <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition group z-20">
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm">Home</span>
+          <span className="text-sm font-medium">Home</span>
         </Link>
-        <h1 className="text-primary font-black text-2xl tracking-tighter">PAIRLY</h1>
-        <div className="w-16"></div>{/* spacer for center alignment */}
+        <h1 className="absolute left-1/2 -translate-x-1/2 text-primary font-black text-2xl tracking-tighter">PAIRLY</h1>
       </div>
 
-      <div className="flex-1 flex flex-col items-center p-4">
+      <div className="relative z-10 flex-1 flex flex-col items-center w-full p-4">
         <div className="w-full max-w-xl">
           {/* Progress Indicator */}
           {step > 2 && step < 6 && (
@@ -170,8 +170,8 @@ export default function Register() {
                 <span className={currentDisplayStep >= 4 ? 'text-primary' : ''}>Preview</span>
               </div>
               <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-primary transition-all duration-500 ease-out" 
+                <div
+                  className="h-full bg-primary transition-all duration-500 ease-out"
                   style={{ width: `${(currentDisplayStep / totalDisplaySteps) * 100}%` }}
                 />
               </div>
@@ -188,13 +188,13 @@ export default function Register() {
               className={step === 6 ? "" : "bg-surface/50 backdrop-blur-xl border border-white/5 p-6 md:p-10 rounded-[2rem] shadow-2xl"}
             >
               <form onSubmit={handleNext}>
-                
+
                 {/* STEP 1: ACCOUNT */}
                 {step === 1 && (
                   <div className="space-y-5">
                     <h2 className="text-3xl font-bold mb-2">Let's get you started.</h2>
                     <p className="text-gray-400 mb-6">Create an account to discover your vibe.</p>
-                    
+
                     <div className="space-y-4">
                       <input type="text" required placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition" />
                       <input type="email" required placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition" />
@@ -221,10 +221,10 @@ export default function Register() {
                           onChange={(e) => {
                             const val = e.target.value;
                             const newOtp = [...otp]; newOtp[i] = val; setOtp(newOtp);
-                            if (val && i < 5) document.getElementById(`otp-${i+1}`)?.focus();
+                            if (val && i < 5) document.getElementById(`otp-${i + 1}`)?.focus();
                           }}
                           onKeyDown={(e) => {
-                            if (e.key === 'Backspace' && !otp[i] && i > 0) document.getElementById(`otp-${i-1}`)?.focus();
+                            if (e.key === 'Backspace' && !otp[i] && i > 0) document.getElementById(`otp-${i - 1}`)?.focus();
                           }}
                           className="w-12 h-14 text-center text-xl font-bold bg-slate-900/50 border border-slate-700 rounded-xl text-white focus:border-primary transition"
                         />
@@ -237,7 +237,7 @@ export default function Register() {
                 {step === 3 && (
                   <div className="space-y-6">
                     <h2 className="text-3xl font-bold mb-2">Tell us a little about yourself.</h2>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-400 mb-3">Profile Photo</label>
                       <div className="relative w-32 h-32 rounded-2xl overflow-hidden bg-slate-800 border-2 border-dashed border-slate-600 flex items-center justify-center hover:border-primary transition group cursor-pointer">
@@ -288,7 +288,7 @@ export default function Register() {
                       <h2 className="text-3xl font-bold mb-2">What are you into?</h2>
                       <p className="text-gray-400">Choose at least 5 interests.</p>
                     </div>
-                    
+
                     <div className="flex flex-wrap gap-2 py-2">
                       {INTERESTS.map(interest => {
                         const isSelected = selectedInterests.includes(interest);
@@ -316,12 +316,12 @@ export default function Register() {
                             </label>
                             {opt === 'Other' && weekend === 'Other' && (
                               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-2 pl-2">
-                                <input 
-                                  type="text" 
-                                  placeholder="Type your ideal weekend..." 
-                                  value={customWeekend} 
-                                  onChange={e => setCustomWeekend(e.target.value)} 
-                                  className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-primary transition" 
+                                <input
+                                  type="text"
+                                  placeholder="Type your ideal weekend..."
+                                  value={customWeekend}
+                                  onChange={e => setCustomWeekend(e.target.value)}
+                                  className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-primary transition"
                                 />
                               </motion.div>
                             )}
@@ -336,7 +336,7 @@ export default function Register() {
                 {step === 5 && (
                   <div className="space-y-8">
                     <h2 className="text-3xl font-bold mb-2">Who are you looking for?</h2>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-400 mb-3">Interested in</label>
                       <div className="flex gap-3">
@@ -414,6 +414,6 @@ export default function Register() {
           </AnimatePresence>
         </div>
       </div>
-    </div>
+    </AuroraBackground>
   );
 }

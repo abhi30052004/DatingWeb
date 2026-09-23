@@ -176,8 +176,10 @@ export const HeroSection = () => {
           
           <p className="text-white/40 text-xs mt-4 uppercase tracking-widest font-semibold">Swipe to discover</p>
         </div>
-
       </div>
+      
+      {/* Gradient transition to next section */}
+      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-b from-transparent to-background pointer-events-none z-30" />
     </AuroraBackground>
   );
 };
