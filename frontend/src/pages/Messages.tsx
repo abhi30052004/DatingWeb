@@ -3,8 +3,19 @@ import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Send, ArrowLeft, MoreVertical, MessageCircle, Smile, Search, Mic, X, MapPin, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { API_URL, WS_URL } from '../services/api';
+
+// Lightweight emoji panel - no blob workers needed
+const EMOJIS = ['😀','😂','😍','🥰','😘','😎','🤩','😭','😤','🤔','👍','❤️','🔥','🎉','😊','🤣','😅','😆','🥺','😳','🤗','😏','😒','🙄','😴','🤤','😋','😌','🥳','💯','✨','💪','🙏','👏','💬','🌹','🎊','💖','😇','🤭'];
+
+const SimpleEmojiPicker = ({ onSelect }: { onSelect: (e: string) => void }) => (
+  <div className="p-2 grid grid-cols-8 gap-1 bg-[#233138] border border-slate-700 rounded-xl shadow-2xl max-h-48 overflow-y-auto w-72">
+    {EMOJIS.map(em => (
+      <button key={em} type="button" onClick={() => onSelect(em)}
+        className="text-xl p-1 rounded hover:bg-[#2a3942] transition leading-none">{em}</button>
+    ))}
+  </div>
+);
 
 export default function Messages() {
   const { matchId } = useParams();
@@ -449,9 +460,13 @@ export default function Messages() {
                             : 'bg-[#202c33] text-[#e9edef] rounded-lg rounded-tl-sm'
                         }`}>
                           {msg.type === 'audio' ? (
-                            <div className="pt-1 pb-2">
-                              <audio controls src={msg.content} className="h-10 max-w-[200px] md:max-w-[250px]" />
-                            </div>
+                            msg.content && !msg.content.startsWith('blob:') ? (
+                              <div className="pt-1 pb-2">
+                                <audio controls src={msg.content} className="h-10 max-w-[200px] md:max-w-[250px]" />
+                              </div>
+                            ) : (
+                              <span className="text-[13px] text-gray-400 italic">🎤 Voice message (expired)</span>
+                            )
                           ) : (
                             <span>{msg.content}</span>
                           )}
@@ -503,8 +518,8 @@ export default function Messages() {
                   </div>
                   
                   {showEmojiPicker && (
-                    <div className="absolute bottom-16 left-0 z-50 shadow-2xl">
-                      <EmojiPicker onEmojiClick={onEmojiClick} theme={Theme.DARK} />
+                    <div className="absolute bottom-16 left-0 z-50">
+                      <SimpleEmojiPicker onSelect={(em) => { setInput(prev => prev + em); }} />
                     </div>
                   )}
 
