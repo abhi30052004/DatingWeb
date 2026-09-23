@@ -45,7 +45,31 @@ async def upload_profile_photo(
 async def get_my_profile(current_user: Annotated[dict, Depends(get_current_user)], db = Depends(get_db)):
     profile = await db["profiles"].find_one({"user_id": current_user["_id"]})
     if not profile:
-        raise HTTPException(status_code=404, detail="Profile not found")
+        profile_doc = {
+            "user_id": current_user["_id"],
+            "bio": "",
+            "profession": "",
+            "city": "",
+            "state": "",
+            "latitude": None,
+            "longitude": None,
+            "relationship_goal": "",
+            "profile_photo": "",
+            "photos": [],
+            "interests": [],
+            "languages": [],
+            "interested_in": "everyone",
+            "min_age": 18,
+            "max_age": 99,
+            "smoking": "No preference",
+            "drinking": "No preference",
+            "pets": "No preference",
+            "introvert_extrovert": "",
+            "weekend_preference": "",
+            "personality_traits": []
+        }
+        await db["profiles"].insert_one(profile_doc)
+        profile = profile_doc
     return profile
 
 @router.put("/me", response_model=schemas.ProfileResponse)
