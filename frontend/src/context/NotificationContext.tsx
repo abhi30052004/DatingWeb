@@ -1,91 +1,47 @@
-import React, { createContext, useContext, useEffect, useRef } from 'react';
-import toast from 'react-hot-toast';
-import { useAuth } from './AuthContext';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { WS_URL } from '../services/api';
 
-interface NotificationContextType {}
+interface NotificationContextType {
+  totalUnread: number;
+  clearUnread: () => void;
+}
 
-const NotificationContext = createContext<NotificationContextType>({});
+const NotificationContext = createContext<NotificationContextType>({ totalUnread: 0, clearUnread: () => {} });
 
 export const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
-  const { token, user } = useAuth();
-  const ws = useRef<WebSocket | null>(null);
+  const [totalUnread, setTotalUnread] = useState(0);
+  const wsRef = useRef<WebSocket | null>(null);
+
+  const clearUnread = () => setTotalUnread(0);
 
   useEffect(() => {
-    if (!token || !user) {
-      if (ws.current) {
-        ws.current.close();
-        ws.current = null;
-      }
-      return;
-    }
+    const token = localStorage.getItem('token');
+    if (!token) return;
 
-    // Connect to global notifications websocket
     const connect = () => {
-      // Use ws:// or wss:// depending on protocol
-      const wsUrl = `${WS_URL}/notifications/ws?token=${token}`;
-      
-      const socket = new WebSocket(wsUrl);
-
-      socket.onopen = () => {
-        console.log("Connected to global notifications");
-      };
-
-      socket.onmessage = (event) => {
+      const ws = new WebSocket(WS_URL + '/notifications/ws?token=' + token);
+      ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          
-          if (data.type === 'NEW_MATCH') {
-            toast(data.message, {
-              duration: 5000,
-              icon: '🎉',
-              style: {
-                background: 'linear-gradient(to right, #ec4899, #8b5cf6)',
-                color: '#fff',
-                fontWeight: 'bold',
-              },
-            });
-          } 
-          else if (data.type === 'NEW_MESSAGE') {
-            toast(data.message, {
-              duration: 4000,
-              icon: '💬',
-              style: {
-                background: '#1e293b',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.1)',
-              },
-            });
+          if (data.type === 'NEW_MESSAGE' && data.match_id) {
+            const currentPath = window.location.pathname;
+            if (!currentPath.includes(data.match_id)) {
+              setTotalUnread(prev => prev + 1);
+            }
           }
-        } catch (error) {
-          console.error("Error parsing notification:", error);
-        }
+        } catch {}
       };
-
-      socket.onclose = (_event: CloseEvent) => {
-        console.log("Notification websocket closed. Reconnecting in 5s...");
-        setTimeout(() => {
-          if (ws.current === socket) {
-             connect();
-          }
-        }, 5000);
-      };
-
-      ws.current = socket;
+      ws.onclose = () => setTimeout(connect, 5000);
+      ws.onerror = () => ws.close();
+      wsRef.current = ws;
     };
 
     connect();
-
-    return () => {
-      if (ws.current) {
-        ws.current.close();
-        ws.current = null;
-      }
-    };
-  }, [token, user]);
+    return () => { wsRef.current?.close(); };
+  }, []);
 
   return (
-    <NotificationContext.Provider value={{}}>
+    <NotificationContext.Provider value={{ totalUnread, clearUnread }}>
       {children}
     </NotificationContext.Provider>
   );

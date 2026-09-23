@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Send, ArrowLeft, MoreVertical, MessageCircle, Smile, Search, Mic, X, MapPin, Trash2 } from 'lucide-react';
@@ -14,18 +14,27 @@ export default function Messages() {
   const [matches, setMatches] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(true); // For chat messages
+  const [loading, setLoading] = useState(true);
   const [matchesLoading, setMatchesLoading] = useState(true);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showProfileSidebar, setShowProfileSidebar] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
+  const [lastMessages, setLastMessages] = useState<Record<string, string>>({});
+  const [wsReady, setWsReady] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
+  const globalWsRef = useRef<WebSocket | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const matchIdRef = useRef<string | undefined>(matchId);
+
+  // Keep matchIdRef in sync
+  useEffect(() => { matchIdRef.current = matchId; }, [matchId]);
 
   // Simulated online status for demo
   const isOnline = true;
@@ -58,14 +67,97 @@ export default function Messages() {
     fetchMatches();
   }, [navigate]);
 
-  // Initialize chat data and WebSocket
+  // Setup per-chat WebSocket with auto-reconnect
+  const connectChatWs = useCallback((mid: string) => {
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+    if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+
+    const token = localStorage.getItem('token');
+    const wsUrl = `${WS_URL}/messages/ws/${mid}?token=${token}`;
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => setWsReady(true);
+
+    ws.onmessage = (event) => {
+      try {
+        const newMessage = JSON.parse(event.data);
+        // If this message is for the active chat, add it
+        if (newMessage.match_id === matchIdRef.current) {
+          setMessages(prev => {
+            if (prev.some(m => m.id === newMessage.id)) return prev;
+            return [...prev, newMessage];
+          });
+        }
+      } catch {}
+    };
+
+    ws.onclose = () => {
+      setWsReady(false);
+      // Auto-reconnect after 3s
+      reconnectTimerRef.current = setTimeout(() => {
+        if (matchIdRef.current === mid) connectChatWs(mid);
+      }, 3000);
+    };
+
+    ws.onerror = () => ws.close();
+    wsRef.current = ws;
+  }, []);
+
+  // Global notification WebSocket - listens for NEW_MESSAGE from other chats
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const connectGlobalWs = () => {
+      const ws = new WebSocket(`${WS_URL}/notifications/ws?token=${token}`);
+      
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === 'NEW_MESSAGE' && data.match_id) {
+            const incomingMatchId = data.match_id;
+            // Only show badge if not currently viewing that chat
+            if (matchIdRef.current !== incomingMatchId) {
+              setUnreadCounts(prev => ({
+                ...prev,
+                [incomingMatchId]: (prev[incomingMatchId] || 0) + 1
+              }));
+              // Show toast with sender info from message text
+              toast(data.message || 'New message', {
+                icon: '💬',
+                duration: 4000,
+                style: { background: '#202c33', color: '#e9edef', border: '1px solid #374151' }
+              });
+            }
+            // Update last message preview
+            setLastMessages(prev => ({ ...prev, [incomingMatchId]: data.message || 'New message' }));
+          }
+        } catch {}
+      };
+
+      ws.onclose = () => setTimeout(connectGlobalWs, 5000);
+      ws.onerror = () => ws.close();
+      globalWsRef.current = ws;
+    };
+
+    connectGlobalWs();
+    return () => globalWsRef.current?.close();
+  }, []);
+
+  // Initialize chat data and per-chat WebSocket
   useEffect(() => {
     if (!matchId) {
       setLoading(false);
       return;
     }
 
+    // Clear unread badge when opening this chat
+    setUnreadCounts(prev => ({ ...prev, [matchId]: 0 }));
     setLoading(true);
+    setMessages([]);
 
     const fetchInitialMessages = async () => {
       try {
@@ -85,30 +177,13 @@ export default function Messages() {
     };
 
     fetchInitialMessages();
-
-    // Initialize WebSocket - pass token as query param for auth
-    const token = localStorage.getItem('token');
-    const wsUrl = `${WS_URL}/messages/ws/${matchId}?token=${token}`;
-    const ws = new WebSocket(wsUrl);
-    
-    ws.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      setMessages(prev => {
-        if (prev.some(m => m.id === newMessage.id)) return prev;
-        return [...prev, newMessage];
-      });
-    };
-
-    ws.onclose = () => {
-      console.log("WebSocket disconnected");
-    };
-
-    wsRef.current = ws;
+    connectChatWs(matchId);
 
     return () => {
-      ws.close();
+      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+      wsRef.current?.close();
     };
-  }, [matchId]);
+  }, [matchId, connectChatWs]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -264,7 +339,10 @@ export default function Messages() {
             </div>
           ) : (
             <div className="flex flex-col mt-1">
-              {matches.map(match => (
+              {matches.map(match => {
+                const unread = unreadCounts[match.match_id] || 0;
+                const lastMsg = lastMessages[match.match_id];
+                return (
                 <button
                   key={match.match_id}
                   onClick={() => navigate(`/messages/${match.match_id}`)}
@@ -279,15 +357,25 @@ export default function Messages() {
                   </div>
                   <div className="flex-1 text-left min-w-0 border-b border-slate-800/50 pb-3 pt-2">
                     <div className="flex justify-between items-center mb-0.5">
-                      <h4 className="font-semibold text-white truncate capitalize text-[15px]">{match.name}</h4>
-                      <span className="text-xs text-gray-500">
+                      <h4 className={`font-semibold truncate capitalize text-[15px] ${unread > 0 ? 'text-white' : 'text-gray-300'}`}>{match.name}</h4>
+                      <span className="text-xs text-gray-500 shrink-0">
                         {match.created_at ? new Date(match.created_at).toLocaleDateString() : ''}
                       </span>
                     </div>
-                    <p className="text-[13px] text-gray-400 truncate">Tap to view chat...</p>
+                    <div className="flex items-center justify-between">
+                      <p className={`text-[13px] truncate ${unread > 0 ? 'text-[#00a884] font-medium' : 'text-gray-500'}`}>
+                        {lastMsg ? lastMsg.replace(/^💬 [^:]+: /, '') : 'Tap to view chat...'}
+                      </p>
+                      {unread > 0 && (
+                        <span className="ml-2 shrink-0 min-w-[20px] h-5 rounded-full bg-[#00a884] text-white text-[11px] font-bold flex items-center justify-center px-1.5">
+                          {unread > 99 ? '99+' : unread}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </button>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

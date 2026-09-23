@@ -1,13 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Search, Heart, MessageCircle, User, Star, LogOut, Compass } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useNotifications } from '../context/NotificationContext';
 
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { totalUnread, clearUnread } = useNotifications();
   const [imgError, setImgError] = useState(false);
+
+  // Clear badge when navigating to messages
+  useEffect(() => {
+    if (location.pathname.startsWith('/messages')) {
+      clearUnread();
+    }
+  }, [location.pathname]);
 
   const handleLogout = () => {
     logout();
@@ -40,6 +49,7 @@ export default function Layout() {
         <nav className="flex-1 space-y-2">
           {desktopNavItems.map((item) => {
             const isActive = location.pathname.startsWith(item.path);
+            const isMessages = item.path === '/messages';
             return (
               <Link 
                 key={item.path} 
@@ -48,7 +58,14 @@ export default function Layout() {
                   isActive ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-400 hover:bg-slate-800 hover:text-white'
                 }`}
               >
-                <item.icon size={24} className={isActive ? 'text-primary' : ''} />
+                <div className="relative">
+                  <item.icon size={24} className={isActive ? 'text-primary' : ''} />
+                  {isMessages && totalUnread > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center px-1">
+                      {totalUnread > 9 ? '9+' : totalUnread}
+                    </span>
+                  )}
+                </div>
                 <span className="text-lg">{item.label}</span>
               </Link>
             )
