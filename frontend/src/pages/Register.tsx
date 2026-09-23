@@ -137,11 +137,25 @@ export default function Register() {
     }
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Simulate upload with local object URL
-      setPhoto(URL.createObjectURL(file));
+      const formData = new FormData();
+      formData.append('file', file);
+      const token = localStorage.getItem('token');
+      
+      const res = await fetch(`${API_URL}/profiles/photo`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+      
+      if (res.ok) {
+        const data = await res.json();
+        setPhoto(data.url);
+      } else {
+        toast.error("Failed to upload photo");
+      }
     }
   };
 

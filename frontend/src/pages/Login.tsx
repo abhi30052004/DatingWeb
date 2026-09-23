@@ -36,7 +36,7 @@ export default function Login() {
       const data = await response.json();
       localStorage.setItem('token', data.access_token);
       toast.success('Welcome back!');
-      navigate('/discover');
+      window.location.href = '/discover';
     } catch (error: any) {
       toast.error(error.message);
     } finally {
