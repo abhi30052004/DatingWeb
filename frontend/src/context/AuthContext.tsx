@@ -35,6 +35,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           });
           if (response.ok) {
             const userData = await response.json();
+            // Also fetch profile photo
+            try {
+              const profileRes = await fetch(`${API_URL}/profiles/me`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+              });
+              if (profileRes.ok) {
+                const profileData = await profileRes.json();
+                userData.profile_photo = profileData.profile_photo || '';
+              }
+            } catch {}
             setUser(userData);
           } else {
             localStorage.removeItem('token');

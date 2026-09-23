@@ -86,8 +86,9 @@ export default function Messages() {
 
     fetchInitialMessages();
 
-    // Initialize WebSocket
-    const wsUrl = `${WS_URL}/messages/ws/${matchId}`;
+    // Initialize WebSocket - pass token as query param for auth
+    const token = localStorage.getItem('token');
+    const wsUrl = `${WS_URL}/messages/ws/${matchId}?token=${token}`;
     const ws = new WebSocket(wsUrl);
     
     ws.onmessage = (event) => {

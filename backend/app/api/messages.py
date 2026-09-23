@@ -8,7 +8,9 @@ import shutil
 import uuid
 
 from ..database import get_db
-from .auth import get_current_user
+from .auth import get_current_user, oauth2_scheme
+from ..auth.security import SECRET_KEY, ALGORITHM
+from jose import JWTError, jwt
 
 router = APIRouter(prefix="/messages", tags=["messages"])
 
@@ -50,13 +52,32 @@ class MessageResponse(BaseModel):
     created_at: datetime
 
 @router.websocket("/ws/{match_id}")
-async def websocket_endpoint(websocket: WebSocket, match_id: str):
+async def websocket_endpoint(websocket: WebSocket, match_id: str, token: str = None):
+    # Authenticate via query param token
+    db = get_db()
+    
+    if not token:
+        await websocket.close(code=4001)
+        return
+    
+    try:
+        from jose import jwt as jose_jwt
+        payload = jose_jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email = payload.get("sub")
+        if not email:
+            await websocket.close(code=4001)
+            return
+        user = await db["users"].find_one({"email": email})
+        if not user:
+            await websocket.close(code=4001)
+            return
+    except Exception:
+        await websocket.close(code=4001)
+        return
+
     await manager.connect(websocket, match_id)
     try:
         while True:
-            # We keep the connection open, but we expect messages to come via the REST POST endpoint
-            # for simpler authentication and database saving.
-            # If the client sends something here, we just ignore it for now.
             data = await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket, match_id)
