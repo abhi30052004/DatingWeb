@@ -199,9 +199,6 @@ export default function Messages() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const onEmojiClick = (emojiObject: any) => {
-    setInput(prev => prev + emojiObject.emoji);
-  };
 
   const startRecording = async () => {
     try {
