@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { Send, ArrowLeft, MoreVertical, MessageCircle, Smile, Search, Paperclip, Mic, X, MapPin, Trash2, Square } from 'lucide-react';
+import { Send, ArrowLeft, MoreVertical, MessageCircle, Smile, Search, Mic, X, MapPin, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { API_URL, WS_URL } from '../services/api';
@@ -25,7 +25,7 @@ export default function Messages() {
   const wsRef = useRef<WebSocket | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Simulated online status for demo
   const isOnline = true;
