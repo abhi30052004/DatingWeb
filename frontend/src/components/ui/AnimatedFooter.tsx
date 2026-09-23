@@ -1,7 +1,5 @@
-import * as React from "react";
 import { useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
-import { useTheme } from "next-themes";
 import { cn } from "../../lib/utils";
 
 /**
@@ -211,14 +209,8 @@ export function AnimatedFooter({
   const animateInRef = useRef<() => void>(() => {});
   const animateOutRef = useRef<() => void>(() => {});
 
-  let resolvedTheme = "dark";
-  try {
-    const themeContext = useTheme();
-    resolvedTheme = themeContext.resolvedTheme || "dark";
-  } catch (e) {
-    // Ignore error if not wrapped in ThemeProvider
-  }
-  const isDark = resolvedTheme === "dark" || document.documentElement.classList.contains("dark");
+  const isDark = document.documentElement.classList.contains("dark") || true; // Defaulting to dark since app is mostly dark
+
 
   const cc = charColor ?? (isDark ? "#803500" : "#e6b093");
   const hc = hoverColor ?? "#ff6a00";
