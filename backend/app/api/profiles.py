@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Request
 from typing import List, Annotated
 from bson import ObjectId
 import os
@@ -13,6 +13,7 @@ router = APIRouter(prefix="/profiles", tags=["profiles"])
 
 @router.post("/photo")
 async def upload_profile_photo(
+    request: Request,
     file: UploadFile = File(...),
     current_user: dict = Depends(get_current_user),
     db = Depends(get_db)
@@ -30,7 +31,11 @@ async def upload_profile_photo(
         shutil.copyfileobj(file.file, buffer)
 
     # The URL to access the photo
-    backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+    base_url = str(request.base_url).rstrip("/")
+    if "localhost" not in base_url and "127.0.0.1" not in base_url and base_url.startswith("http://"):
+        base_url = base_url.replace("http://", "https://")
+        
+    backend_url = os.getenv("BACKEND_URL", base_url)
     photo_url = f"{backend_url}/uploads/{filename}"
 
     # Update profile in database

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect, UploadFile, File, Form, Request
 from typing import Annotated, List, Dict
 from bson import ObjectId
 from datetime import datetime
@@ -156,6 +156,7 @@ async def get_messages(
 
 @router.post("/audio", response_model=MessageResponse)
 async def send_audio_message(
+    request: Request,
     match_id: str = Form(...),
     file: UploadFile = File(...),
     current_user: dict = Depends(get_current_user),
@@ -181,7 +182,11 @@ async def send_audio_message(
     with open(filepath, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+    base_url = str(request.base_url).rstrip("/")
+    if "localhost" not in base_url and "127.0.0.1" not in base_url and base_url.startswith("http://"):
+        base_url = base_url.replace("http://", "https://")
+        
+    backend_url = os.getenv("BACKEND_URL", base_url)
     audio_url = f"{backend_url}/uploads/{filename}"
 
     msg_doc = {

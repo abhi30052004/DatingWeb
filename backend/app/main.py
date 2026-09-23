@@ -14,26 +14,30 @@ async def lifespan(app: FastAPI):
     # Create database indexes to improve performance
     db = get_db()
     
-    import pymongo
-    # users collection
-    await db["users"].create_index([("email", pymongo.ASCENDING)], unique=True)
-    
-    # profiles collection
-    await db["profiles"].create_index([("user_id", pymongo.ASCENDING)], unique=True)
-    await db["profiles"].create_index([("city", pymongo.ASCENDING)])
-    await db["profiles"].create_index([("profession", pymongo.ASCENDING)])
-    
-    # swipes collection
-    await db["swipes"].create_index([("user_id", pymongo.ASCENDING)])
-    await db["swipes"].create_index([("target_user_id", pymongo.ASCENDING)])
-    await db["swipes"].create_index([("user_id", pymongo.ASCENDING), ("target_user_id", pymongo.ASCENDING)], unique=True)
-    
-    # matches collection
-    await db["matches"].create_index([("users", pymongo.ASCENDING)])
-    
-    # messages collection
-    await db["messages"].create_index([("match_id", pymongo.ASCENDING)])
-    await db["messages"].create_index([("created_at", pymongo.ASCENDING)])
+    try:
+        import pymongo
+        # users collection
+        await db["users"].create_index([("email", pymongo.ASCENDING)], unique=True)
+        
+        # profiles collection
+        await db["profiles"].create_index([("user_id", pymongo.ASCENDING)], unique=True)
+        await db["profiles"].create_index([("city", pymongo.ASCENDING)])
+        await db["profiles"].create_index([("profession", pymongo.ASCENDING)])
+        
+        # swipes collection
+        await db["swipes"].create_index([("user_id", pymongo.ASCENDING)])
+        await db["swipes"].create_index([("target_user_id", pymongo.ASCENDING)])
+        # Removing unique=True to prevent crashes on existing duplicate swipes
+        await db["swipes"].create_index([("user_id", pymongo.ASCENDING), ("target_user_id", pymongo.ASCENDING)])
+        
+        # matches collection
+        await db["matches"].create_index([("users", pymongo.ASCENDING)])
+        
+        # messages collection
+        await db["messages"].create_index([("match_id", pymongo.ASCENDING)])
+        await db["messages"].create_index([("created_at", pymongo.ASCENDING)])
+    except Exception as e:
+        print(f"Warning: Failed to create some database indexes: {e}")
     
     yield
     # Cleanup on shutdown (if needed)
