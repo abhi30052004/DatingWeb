@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Heart, MapPin } from 'lucide-react';
 
@@ -11,6 +12,7 @@ const DISCOVER_PROFILES = [
 ];
 
 export const DiscoverSection = () => {
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -61,10 +63,10 @@ export const DiscoverSection = () => {
                 
                 {/* Action Buttons on Hover */}
                 <div className="flex justify-between gap-4 opacity-0 transform translate-y-4 transition-all duration-300 delay-75 group-hover:opacity-100 group-hover:translate-y-0">
-                  <button className="flex-1 py-2 rounded-full glass border border-white/10 text-white font-medium hover:bg-white/10 transition-colors">
+                  <button onClick={() => navigate('/register')} className="flex-1 py-2 rounded-full glass border border-white/10 text-white font-medium hover:bg-white/10 transition-colors">
                     View
                   </button>
-                  <button className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform">
+                  <button onClick={() => navigate('/register')} className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform">
                     <Heart size={18} fill="currentColor" />
                   </button>
                 </div>

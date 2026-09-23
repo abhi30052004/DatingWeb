@@ -39,7 +39,7 @@ const testimonials = [
 
 export const TestimonialsSection = () => {
   return (
-    <section className="py-24 relative z-20 bg-background overflow-hidden border-t border-white/5">
+    <section id="testimonials" className="py-24 relative z-20 bg-background overflow-hidden border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
         <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
           Don't just take <span className="text-gradient">our word for it.</span>

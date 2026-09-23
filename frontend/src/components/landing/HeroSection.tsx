@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BlurText } from '../ui/BlurText';
 import { MagneticButton } from '../ui/MagneticButton';
 import { ArrowRight, X, Heart, Star } from 'lucide-react';
@@ -41,6 +42,7 @@ const MOCK_HERO_PROFILES = [
 
 export const HeroSection = () => {
   const [cards, setCards] = useState(MOCK_HERO_PROFILES);
+  const navigate = useNavigate();
 
   const handleSwipe = (direction: string, id: number) => {
     console.log(`Swiped ${direction} on ${id}`);
@@ -65,11 +67,17 @@ export const HeroSection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-5">
-            <MagneticButton className="px-8 py-4 bg-gradient-to-r from-primary to-secondary hover:opacity-90 rounded-full font-semibold text-lg shadow-[0_0_30px_rgba(236,72,153,0.3)] transition-all flex items-center gap-2 group">
+            <MagneticButton 
+              onClick={() => navigate('/register')}
+              className="px-8 py-4 bg-gradient-to-r from-primary to-secondary hover:opacity-90 rounded-full font-semibold text-lg shadow-[0_0_30px_rgba(236,72,153,0.3)] transition-all flex items-center gap-2 group"
+            >
               Start Matching
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </MagneticButton>
-            <MagneticButton className="px-8 py-4 glass rounded-full font-semibold text-lg hover:bg-white/10 transition-all">
+            <MagneticButton 
+              onClick={() => navigate('/login')}
+              className="px-8 py-4 glass rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
+            >
               Explore
             </MagneticButton>
           </div>

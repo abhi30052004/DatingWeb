@@ -1,10 +1,12 @@
 
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { MagneticButton } from '../ui/MagneticButton';
 import { AuroraBackground } from '../ui/AuroraBackground';
 
 export const FinalCTA = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-32 relative overflow-hidden flex items-center justify-center min-h-[600px] border-t border-white/5">
       <AuroraBackground className="absolute inset-0 z-0 h-full" />
@@ -41,7 +43,7 @@ export const FinalCTA = () => {
           Join Pairly and start discovering people who match your vibe.
         </p>
         
-        <MagneticButton className="px-10 py-5 bg-white text-black hover:bg-white/90 rounded-full font-bold text-lg shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all flex items-center gap-3 group">
+        <MagneticButton onClick={() => navigate('/register')} className="px-10 py-5 bg-white text-black hover:bg-white/90 rounded-full font-bold text-lg shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all flex items-center gap-3 group">
           Start Matching
           <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
         </MagneticButton>
