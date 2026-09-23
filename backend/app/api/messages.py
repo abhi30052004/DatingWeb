@@ -1,8 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect, UploadFile, File, Form
 from typing import Annotated, List, Dict
 from bson import ObjectId
 from datetime import datetime
 from pydantic import BaseModel, Field
+import os
+import shutil
+import uuid
 
 from ..database import get_db
 from .auth import get_current_user
@@ -36,12 +39,14 @@ manager = ConnectionManager()
 class MessageCreate(BaseModel):
     match_id: str
     content: str
+    type: str = "text"
 
 class MessageResponse(BaseModel):
     id: str
     match_id: str
     sender_id: str
     content: str
+    type: str
     created_at: datetime
 
 @router.websocket("/ws/{match_id}")
@@ -80,6 +85,7 @@ async def send_message(
         "match_id": match_obj_id,
         "sender_id": current_user["_id"],
         "content": message.content,
+        "type": message.type,
         "created_at": datetime.utcnow()
     }
     
@@ -91,6 +97,7 @@ async def send_message(
         "match_id": str(match_obj_id),
         "sender_id": str(current_user["_id"]),
         "content": message.content,
+        "type": message.type,
         "created_at": msg_doc["created_at"].isoformat() # Convert to string for JSON
     }
     
@@ -141,7 +148,72 @@ async def get_messages(
             "match_id": str(msg["match_id"]),
             "sender_id": str(msg["sender_id"]),
             "content": msg["content"],
+            "type": msg.get("type", "text"),
             "created_at": msg["created_at"]
         })
         
     return response
+
+@router.post("/audio", response_model=MessageResponse)
+async def send_audio_message(
+    match_id: str = Form(...),
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user),
+    db = Depends(get_db)
+):
+    try:
+        match_obj_id = ObjectId(match_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid match ID")
+
+    match = await db["matches"].find_one({
+        "_id": match_obj_id,
+        "users": current_user["_id"]
+    })
+    
+    if not match:
+        raise HTTPException(status_code=404, detail="Match not found")
+
+    extension = file.filename.split('.')[-1] if '.' in file.filename else 'webm'
+    filename = f"{uuid.uuid4()}.{extension}"
+    filepath = os.path.join("uploads", filename)
+
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+    audio_url = f"{backend_url}/uploads/{filename}"
+
+    msg_doc = {
+        "match_id": match_obj_id,
+        "sender_id": current_user["_id"],
+        "content": audio_url,
+        "type": "audio",
+        "created_at": datetime.utcnow()
+    }
+    
+    result = await db["messages"].insert_one(msg_doc)
+    
+    response_data = {
+        "id": str(result.inserted_id),
+        "match_id": str(match_obj_id),
+        "sender_id": str(current_user["_id"]),
+        "content": audio_url,
+        "type": "audio",
+        "created_at": msg_doc["created_at"].isoformat()
+    }
+    
+    await manager.broadcast(str(match_obj_id), response_data)
+    
+    from .notifications import notification_manager
+    recipient_id = next(uid for uid in match["users"] if uid != current_user["_id"])
+    sender_name = current_user.get("name", "Someone")
+    
+    notification_msg = {
+        "type": "NEW_MESSAGE",
+        "message": f"🎤 {sender_name} sent a voice message",
+        "match_id": str(match_obj_id)
+    }
+    await notification_manager.send_personal_message(notification_msg, str(recipient_id))
+    
+    return response_data

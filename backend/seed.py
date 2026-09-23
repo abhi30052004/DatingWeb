@@ -14,7 +14,7 @@ client = AsyncIOMotorClient(MONGO_DETAILS)
 db = client[DATABASE_NAME]
 
 # Pre-computed bcrypt hash for "password123" to bypass passlib bugs on newer python/bcrypt versions
-HARDCODED_HASH = "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjIQqiRQYq"
+HARDCODED_HASH = "$2b$12$YvYF/j8M9X8elUSqx9saJ.0EbJE5QRwVrNFIvWaYRE2iVc75Gwnl6"
 
 DEMO_PROFILES = [
     {

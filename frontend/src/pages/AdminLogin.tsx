@@ -34,8 +34,6 @@ const AdminLogin = () => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full bg-card/80 backdrop-blur-md rounded-2xl p-8 border border-white/10 shadow-2xl relative z-10 overflow-hidden"
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500"></div>
-
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center border border-red-500/30">
             <ShieldAlert size={32} className="text-red-500" />

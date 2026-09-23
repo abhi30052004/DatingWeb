@@ -109,6 +109,9 @@ async def get_my_matches(
                 "user_id": str(other_user_id),
                 "name": user.get("name", "Unknown"),
                 "profile_photo": profile.get("profile_photo", ""),
+                "bio": profile.get("bio", ""),
+                "interests": profile.get("interests", []),
+                "city": profile.get("city", ""),
                 "created_at": m.get("created_at")
             })
             
