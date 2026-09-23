@@ -22,7 +22,7 @@ export default function Messages() {
   const [recordingTime, setRecordingTime] = useState(0);
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({});
   const [lastMessages, setLastMessages] = useState<Record<string, string>>({});
-  const [wsReady, setWsReady] = useState(false);
+
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
@@ -79,7 +79,7 @@ export default function Messages() {
     const wsUrl = `${WS_URL}/messages/ws/${mid}?token=${token}`;
     const ws = new WebSocket(wsUrl);
 
-    ws.onopen = () => setWsReady(true);
+    ws.onopen = () => {};
 
     ws.onmessage = (event) => {
       try {
@@ -95,7 +95,6 @@ export default function Messages() {
     };
 
     ws.onclose = () => {
-      setWsReady(false);
       // Auto-reconnect after 3s
       reconnectTimerRef.current = setTimeout(() => {
         if (matchIdRef.current === mid) connectChatWs(mid);
